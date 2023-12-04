@@ -1,5 +1,3 @@
-#pragma once
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -7,7 +5,7 @@
 #include <mutex>
 #include <SFML/Graphics.hpp>
 #include "Rame.h"
-#include "Station.h"
+//#include "Station.h"
 
 
 using namespace std;
@@ -22,7 +20,7 @@ Rame::Rame(string &Station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameLis
     this->Ligne = Ligne;
     this->Nb_pass_Max = Nb_pass_Max;
     this->Nb_pass = 0;
-    this->Next_Station = Table_of_Line[1];
+    this->Next_Station;//Table_of_Line[1];
 
     if (RameList.empty()){
         this->Next_Rame = NULL;
@@ -63,12 +61,12 @@ void Rame::arrive_Station(const string &Station, map<string, bool>&station_occup
 
 
 }
-void Rame::leave_station(const string &Station, map<string,bool>&station_occuped, vector<Station*> &table_station ){
-    if (station_occuped.at(Station) == true ){
-        station_occuped[Station] = false;
+void Rame::leave_station(const string &station, map<string,bool>&station_occuped, vector<Station*> &table_station ){
+    if (station_occuped.at(station) == true ){
+        station_occuped[station] = false;
         
         
-    } else if (station_occuped.at(Station) == false) {
+    } else if (station_occuped.at(station) == false) {
         cout << "ERROR : Station is already not occuped" << endl;
     } else {
         cout << "ERROR in fucntion arrive_Station" << endl;

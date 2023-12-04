@@ -11,7 +11,7 @@
 using namespace std;
 
 // Constructor :
-Rame::Rame(string &Station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameList) {
+Rame::Rame(string &station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameList, vector<Station*>station_list) {
     this->x = 0;
     this->y = 0;
     this->Speed_Act = 0;
@@ -20,7 +20,12 @@ Rame::Rame(string &Station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameLis
     this->Ligne = Ligne;
     this->Nb_pass_Max = Nb_pass_Max;
     this->Nb_pass = 0;
-    this->Next_Station;//Table_of_Line[1];
+
+
+    this->Next_Station = station_list.begin();
+    ++this->Next_Station; 
+    
+    
 
     if (RameList.empty()){
         this->Next_Rame = NULL;
@@ -50,10 +55,14 @@ int Rame::incomming_pass(const int &Nb){
 
     return Nb;
 }
-void Rame::arrive_Station(const string &Station, map<string, bool>&station_occuped ){
-    if (station_occuped.at(Station) == false ){
-        station_occuped[Station] = true;
-    } else if (station_occuped.at(Station) == true) {
+void Rame::arrive_Station(const string &station, map<string, bool>&station_occuped, vector<Station*>station_list ){
+    if (station_occuped.at(station) == false ){
+        station_occuped[station] = true;
+        ++this->Next_Station;
+        if (this->Next_Station == station_list.end()){
+            this->Next_Station = station_list.begin();
+        }
+    } else if (station_occuped.at(station) == true) {
         cout << "ERROR : Station occuped" << endl;
     } else {
         cout << "ERROR in fucntion arrive_Station" << endl;

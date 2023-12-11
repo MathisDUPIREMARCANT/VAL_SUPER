@@ -23,17 +23,17 @@ class Rame {
         int Nb_pass_Max;
         int Nb_pass;
 
-        std::vector<Station *>::iterator Next_Station;
+        vector<Station>::iterator Next_Station;
 
 
     public:
         Rame* Next_Rame;
-        Rame(string &station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameList);
+        Rame(string &station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameList, vector<Station> station_list);
 
         int leaving_pass(const int &Nb);
         int incomming_pass(const int &Nb);
-        void arrive_Station(const string &station, map<string,bool>&station_occuped, vector<Station*>station_list );
-        void leave_station(const string &station, map<string,bool>&station_occuped, vector<Station*> &table_station  );
+        void arrive_Station(const string &station, map<string,bool>&station_occuped, vector<Station>station_list );
+        void leave_station(const string &station, map<string,bool>&station_occuped, vector<Station> &table_station  );
         void go_to_next_station();
         void accelerate(float second);
         void decelerate(float second);

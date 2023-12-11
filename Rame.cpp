@@ -11,7 +11,7 @@
 using namespace std;
 
 // Constructor :
-Rame::Rame(string &station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameList) {
+Rame::Rame(string &station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameList, vector<Station> station_list) {
     this->x = 0;
     this->y = 0;
     this->Speed_Act = 0;
@@ -55,7 +55,7 @@ int Rame::incomming_pass(const int &Nb){
 
     return Nb;
 }
-void Rame::arrive_Station(const string &station, map<string, bool>&station_occuped, vector<Station*>station_list ){
+void Rame::arrive_Station(const string &station, map<string, bool>&station_occuped, vector<Station>station_list ){
     if (station_occuped.at(station) == false ){
         station_occuped[station] = true;
         ++this->Next_Station;
@@ -70,7 +70,7 @@ void Rame::arrive_Station(const string &station, map<string, bool>&station_occup
 
 
 }
-void Rame::leave_station(const string &station, map<string,bool>&station_occuped, vector<Station*> &table_station ){
+void Rame::leave_station(const string &station, map<string,bool>&station_occuped, vector<Station> &table_station ){
     if (station_occuped.at(station) == true ){
         station_occuped[station] = false;
         

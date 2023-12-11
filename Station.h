@@ -30,6 +30,7 @@ class Station {
         void leaves();
         void calculate_distance(vector<Station>& list);
         float distance_to(Station Other);
+        float get_next_dist();
         string get_name();
 
 };

@@ -14,10 +14,10 @@ using namespace std;
 class Rame {
 
     private:
-        float x;
-        float y;
-        float Speed_Act;
-        float Speed_max;
+        float x; // en m
+        float y; // en m
+        float Speed; // en m/s
+        float Speed_max; // en m/s
         int Id; //Pas besoin relier par reference a l'autre rame
         int Ligne;
         int Nb_pass_Max;
@@ -34,7 +34,7 @@ class Rame {
         int incomming_pass(const int &Nb);
         void arrive_Station(const string &station, map<string,bool>&station_occuped, vector<Station>station_list );
         void leave_station(const string &station, map<string,bool>&station_occuped, vector<Station> &table_station  );
-        void go_to_next_station();
+        int go_to_next_station(float acceleration, float t_mili);
         void accelerate(float second);
         void decelerate(float second);
         float dist_next_rame();

@@ -14,7 +14,7 @@ using namespace std;
 Rame::Rame(string &station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameList, vector<Station> &station_list) {
     this->x = 0;
     this->y = 0;
-    this->Speed_Act = 0;
+    this->Speed = 0;
     this->Speed_max = 100;
     this->Id = RameList.size();
     this->Ligne = Ligne;
@@ -84,8 +84,31 @@ void Rame::leave_station(const string &station, map<string,bool>&station_occuped
 
 }
 
-void Rame::go_to_next_station(){
-    
+int Rame::go_to_next_station(float acceleration, float t_mili){
+    if(!acceleration) {return -1;}
+
+    float t1 = this->Speed_max / (float) acceleration;
+    float x1 = acceleration * t1 * 0.5;
+
+    float distance = Next_Station->get_next_dist();
+
+    if(distance >= 2 * x1){
+        t1;
+        float t2 = (distance - (2.0*x1))this->Speed;
+        float t3 = this->Speed_max / (float) acceleration;
+
+        if()
+        
+        //accelerate
+        //croisière
+        //descelerate
+    }
+    else{
+        //accelerate
+        //descelerate
+    }
+
+    return EXIT_SUCCESS;
 }
 
 

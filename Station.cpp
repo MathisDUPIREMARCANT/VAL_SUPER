@@ -35,6 +35,10 @@ float Station::distance_to(Station Other) {
     return sqrt(pow(Other.x - this->x, 2) + pow(Other.y - this->y, 2));
 }
 
+float Station::get_next_dist(){
+    return this->distance;
+}
+
 void Station::connection(Station &Other) {
     
 }

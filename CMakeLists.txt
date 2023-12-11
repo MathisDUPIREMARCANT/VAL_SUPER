@@ -18,6 +18,5 @@ link_libraries(sfml-graphics sfml-window)
 
 add_executable(SuperVAL
         main.cpp
-        Station.cpp
-        Rame.cpp
+
 )

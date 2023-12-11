@@ -11,7 +11,7 @@
 using namespace std;
 
 // Constructor :
-Rame::Rame(string &station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameList) {
+Rame::Rame(string &station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameList, vector<Station>::iterator station_list) {
     this->x = 0;
     this->y = 0;
     this->Speed_Act = 0;

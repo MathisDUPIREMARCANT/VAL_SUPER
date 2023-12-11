@@ -23,7 +23,7 @@ Rame::Rame(string station, int Ligne, int Nb_pass_Max, vector<Rame>::iterator &R
     }
     
     this->Speed = 0;
-    this->Speed_max = 100;
+    this->Speed_max = 19.5;
     //this->Id = RameList.size();
     this->Ligne = Ligne;
     this->Nb_pass_Max = Nb_pass_Max;
@@ -105,11 +105,15 @@ int Rame::go_to_next_station(float acceleration, float t_mili){
     while (this->dist_next_station() > 0){
         cout << "Speed : " << this->Speed << endl;
         cout << "t1 : " << t1 << endl;
+        cout << "distance - where : " << distance - where << endl;
         cout << "d1 : " << d1 << endl;
         cout << "distance : " << distance << endl;
+        cout << "where : " << where << endl;
+        cout << "x : " << x << endl;
+        cout << "y : " << y << endl;
 
 
-        if(distance >= 2 * d1){
+        if(distance >= (2 * d1)){
             t1;
             d1;
 
@@ -119,18 +123,18 @@ int Rame::go_to_next_station(float acceleration, float t_mili){
             float t3 = this->Speed_max / (float) acceleration;
             float d3 = acceleration * 0.5 * pow(t3, 2);
 
-            if(distance - where > d1){
+            if(distance - where < d1){
                 //accelerate
                 this->Speed = this->Speed + (acceleration * (t_mili/1000));
 
             }
 
-            else if(distance - where > d2){
+            else if(distance - where < d2){
                 //croisière
                 this->Speed = this->Speed_max;
             }
 
-            else if(distance - where > d3){
+            else if(distance - where < d3){
                 //descelerate
                 this->Speed = this->Speed - (acceleration * (t_mili/1000));
             }

@@ -47,6 +47,14 @@ string Station::get_name(){
     return this->name;
 }
 
+float Station::get_x(){
+    return this->x;
+}
+
+float Station::get_y(){
+    return this->y;
+}
+
 void Station::calculate_distance(vector<Station>& list) {
     for (size_t i = 0; i < list.size(); i++) {
         if (this->name == list[i].get_name()) {

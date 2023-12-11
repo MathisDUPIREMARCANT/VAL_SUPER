@@ -32,6 +32,8 @@ class Station {
         float distance_to(Station Other);
         float get_next_dist();
         string get_name();
+        float get_x();
+        float get_y();
 
 };
 

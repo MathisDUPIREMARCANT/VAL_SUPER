@@ -31,6 +31,8 @@ class Station {
         void calculate_distance(vector<Station> list);
         float distance_to(Station* Other);
         string get_name();
+        float get_x();
+        float get_y();
 
 };
 

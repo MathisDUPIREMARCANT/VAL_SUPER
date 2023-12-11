@@ -93,5 +93,5 @@ float Rame::dist_next_rame(){
     return sqrt(pow(this->x - Next_Rame->get_x(), 2) + pow(this->y - Next_Rame->get_y(), 2));
 }
 float Rame::dist_next_station(){
-    return 0;
+    return sqrt(pow(this->x - this->Next_Station, 2) + pow(this->y - Next_Rame->get_y(), 2));
 }

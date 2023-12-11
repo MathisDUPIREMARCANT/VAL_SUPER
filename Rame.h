@@ -22,13 +22,13 @@ class Rame {
         int Ligne;
         int Nb_pass_Max;
         int Nb_pass;
-
+        vector<Rame>::iterator Next_Rame;
         vector<Station>::iterator Next_Station;
 
 
     public:
-        Rame* Next_Rame;
-        Rame(string &station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameList, vector<Station> &station_list);
+        
+        Rame(string station, int Ligne, int Nb_pass_Max, vector<Rame>::iterator &RameList, vector<Station> &station_list);
 
         int leaving_pass(const int &Nb);
         int incomming_pass(const int &Nb);

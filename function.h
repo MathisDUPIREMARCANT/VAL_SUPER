@@ -7,4 +7,5 @@
 #include <SFML/Graphics.hpp>
 #include "Rame.h"
 
-vector<Rame> init_rame(vector<string> stations, vector<int> lignes, vector<int> capacity, vector<Rame*> RameList);
+vector<Rame> init_rame(vector<Station> stations, vector<int> lignes, vector<int> capacity, vector<Rame> &RameList);
+void move_rame(Rame rame, float t_mili, float acceleration);

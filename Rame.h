@@ -28,7 +28,7 @@ class Rame {
 
     public:
         Rame* Next_Rame;
-        Rame(string &station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameList, vector<Station> station_list);
+        Rame(string &station, int &Ligne, int &Nb_pass_Max, vector<Rame*> &RameList, vector<Station> &station_list);
 
         int leaving_pass(const int &Nb);
         int incomming_pass(const int &Nb);

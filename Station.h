@@ -28,7 +28,7 @@ class Station {
         void connection(Station &Other);
         void arrive();
         void leaves();
-        void calculate_distance(vector<Station*> list);
+        void calculate_distance(vector<Station> list);
         float distance_to(Station* Other);
         string get_name();
 

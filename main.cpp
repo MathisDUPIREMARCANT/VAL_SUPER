@@ -54,7 +54,7 @@ int main(){
 
     Rame Rame1 = Rame("Départ", 1, 10, L1_rame.begin(), L1);
 
-    thread thread1(move_rame, Rame1, 1000, 1.13);
+    thread thread1(move_rame, Rame1, 10, 1.13);
 
     thread1.join();
 

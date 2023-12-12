@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 #include <thread>
 #include <mutex>
 #include <cmath>
@@ -91,7 +92,7 @@ void Rame::leave_station(const string &station, map<string,bool>&station_occuped
 
 }
 
-int Rame::go_to_next_station(float acceleration, float t_mili){
+int Rame::go_to_next_station(float acceleration, float t_ref){
     if(!acceleration) {return -1;}
 
     cout << "Speed : " << this->Speed << endl;
@@ -101,81 +102,92 @@ int Rame::go_to_next_station(float acceleration, float t_mili){
 
     int t_mil = 0;
 
-    cout << "t1 : " << t1 << endl;
-    cout << "d1 : " << d1 << endl;
-
     float distance = Next_Station->get_next_dist();
     float where = this->dist_next_station();
 
-    cout << "where : " << where << endl;
-    cout << "dstance : " << distance << endl;
-    cout << "distance - where : " << distance - where << endl;
+    if(distance >= (2 * d1)){
+        float t2 = (distance - (2.0*d1)) / this->Speed_max;
+        float d2 = acceleration * 0.5 * pow(t2, 2);
 
-    while (where > 0){
-        //cout << "Speed : " << this->Speed << endl;
-        // cout << "t1 : " << t1 << endl;
-        // cout << "distance - where : " << distance - where << endl;
-        // cout << "d1 : " << d1 << endl;
-        // cout << "distance : " << distance << endl;
-        // cout << "where : " << where << endl;
-        // cout << "x : " << x << endl;
-        // cout << "y : " << y << endl;
+        float t3 = this->Speed_max / (float) acceleration;
+        float d3 = acceleration * 0.5 * pow(t3, 2);
 
-        float where = this->dist_next_station();
+         cout << "t1 : " << t1 << endl;
+         cout << "d1 : " << d1 << endl;
+        cout << "t2 : " << t2 << endl;
+        cout << "d2 : " << d2 << endl;
+        cout << "t3 : " << t3 << endl;
+        cout << "d3 : " << d3 << endl;
 
-        if(distance >= (2 * d1)){
-            t1;
-            d1;
+        string name = "speed.csv";
+        ofstream file(name);
+        if (file.is_open()){
+            file << "Speed;x;t"<<endl;
 
-            float t2 = (distance - (2.0*d1)) / this->Speed;
-            float d2 = acceleration * 0.5 * pow(t2, 2);
-
-            float t3 = this->Speed_max / (float) acceleration;
-            float d3 = acceleration * 0.5 * pow(t3, 2);
-
+        while(where > 0){
+            float where = this->dist_next_station();
             if(distance - where < d1){
                 //accelerate
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x  << endl;
-                this->Speed = this->Speed + (acceleration * (t_mili/1000));
-                this->x = this->x + (acceleration * 0.5 * pow(t_mil/1000, 2));
+                file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
+                this->Speed = this->Speed + acceleration;
+                this->x = this->x + this->Speed;
 
             }
 
-            else if(distance - where < d2){
+            else if(distance - where < d2+d1){
                 //croisière
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x  << endl;
+                file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
                 this->Speed = this->Speed_max;
-                this->x = this-> x + this->Speed * (t_mil/1000);
+                this->x = this-> x + this->Speed;
             }
 
-            else if(distance - where < d3){
+            else{
                 //descelerate
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x  << endl;
-                this->Speed = this->Speed - (acceleration * (t_mili/1000));
-                this->x = this->x + (acceleration * 0.5 * pow(t_mil/1000, 2));
-            }
+                file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
-            t_mil = t_mil + t_mili;
-            
+                if (t3 < 0){
+                    this->Speed = 0;
+                    this->x = this->Next_Station->get_x();
+                    return 0;
+                }
+                else{
+                    this->Speed = this->Speed - acceleration;
+                    this->x = this->x + this->Speed;
+                }
+                t3 = t3 - (t_ref/1000);
+            }
+            t_mil = t_mil + t_ref;
+            this_thread::sleep_for(1000ms);
         }
-        else{
-        t1;
-        //accelerate
-        //descelerate
-        }
-        this_thread::sleep_for(1000ms);
-        
+
     }
+    else{
+        t1;
+        d1;
+    }
+    }
+
+    // cout << "where : " << where << endl;
+    // cout << "distance : " << distance << endl;
+
     return EXIT_SUCCESS;
 }
 
 
 float Rame::dist_next_rame(){
-    return sqrt(pow(this->x - Next_Rame->get_x(), 2) + pow(this->y - Next_Rame->get_y(), 2));
+    return sqrt(pow(Next_Rame->get_x() - this->x, 2) + pow(Next_Rame->get_y() - this->y, 2));
 }
 float Rame::dist_next_station(){
-    return sqrt(pow(this->x - this->Next_Station->get_x(), 2) + pow(this->y - this->Next_Station->get_y(), 2));
+    // cout << "this->Next_Station->get_x() : " << this->Next_Station->get_x() << endl;
+    // cout << "this->Next_Station->get_y() : " << this->Next_Station->get_y() << endl;
+    // cout << "this->x : " << this->x << endl;
+    // cout << "this->y : " << this->y << endl;
+    
+    return sqrt(pow(this->Next_Station->get_x() - this->x, 2) + pow(this->Next_Station->get_y() - this->y, 2));
 }

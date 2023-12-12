@@ -44,7 +44,7 @@ int main(){
     cout << Station_position_L1.size() << endl;
     cout << Max_Pass_L1.size() << endl;
 
-    for(int i = 0; i < Station_name_L1.size(); i++){
+    for(int i = 0; i < 2; i++){
         L1.emplace_back(Station_name_L1[i], Station_position_L1[i][0], Station_position_L1[i][1], Max_Pass_L1[i]);
     }
 

@@ -32,6 +32,11 @@ void Station::leaves() {
 }
 
 float Station::distance_to(Station Other) {
+    cout << "this->x : " << this->x << endl;
+    cout << "this->y : " << this->y << endl;
+    cout << "Other->x : " << Other.x << endl;
+    cout << "Other->y : " << Other.y << endl;
+    
     return sqrt(pow(Other.x - this->x, 2) + pow(Other.y - this->y, 2));
 }
 

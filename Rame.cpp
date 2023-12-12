@@ -155,15 +155,16 @@ int Rame::go_to_next_station(float acceleration, float t_ref){
                 cout << "x: " << this->x  << endl;
                 file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
-                if (this->Speed < 0){
-                    this->Speed = 0;
-                    this->x = this->Next_Station->get_x();
-                    return 0;
-                }
-                else{
-                    this->Speed = this->Speed - (acceleration * (t_ref/1000));
-                    this->x = this->x + (this->Speed * (t_ref/1000));
-                }
+                this->Speed = this->Speed - (acceleration * (t_ref/1000));
+                this->x = this->x + (this->Speed * (t_ref/1000));
+            }
+            
+            if(this->Speed < 0){
+                this->Speed = 0;
+                this->x = this->Next_Station->get_x();
+                cout << "Speed : " << this->Speed << endl;
+                cout << "x: " << this->x  << endl;
+                return EXIT_SUCCESS;
             }
             t_mil = t_mil + t_ref;
             this_thread::sleep_for(10ms);
@@ -176,8 +177,8 @@ int Rame::go_to_next_station(float acceleration, float t_ref){
     }
     }
 
-    // cout << "where : " << where << endl;
-    // cout << "distance : " << distance << endl;
+    
+    
 
     return EXIT_SUCCESS;
 }

@@ -10,5 +10,6 @@
 // Si on est au debut on avance en +1 jusqu'a atteindre le bout et donc repartir en arriere.
 // On accede au next rame grace a un vecteur qui contient des ppointeur vers des station. Ensuite on utilise get name pour le nom.
 void move_rame(Rame rame, float t_mili, float acceleration){
+    //wrapper
     rame.go_to_next_station(acceleration, t_mili);
 }

@@ -3,7 +3,7 @@
 #include <string>
 #include <thread>
 #include <mutex>
-#include<cmath>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include "Rame.h"
@@ -99,19 +99,29 @@ int Rame::go_to_next_station(float acceleration, float t_mili){
     float t1 = this->Speed_max / (float) acceleration;
     float d1 = acceleration * 0.5 * pow(t1, 2);
 
+    int t_mil = 0;
+
+    cout << "t1 : " << t1 << endl;
+    cout << "d1 : " << d1 << endl;
+
     float distance = Next_Station->get_next_dist();
     float where = this->dist_next_station();
 
-    while (this->dist_next_station() > 0){
-        cout << "Speed : " << this->Speed << endl;
-        cout << "t1 : " << t1 << endl;
-        cout << "distance - where : " << distance - where << endl;
-        cout << "d1 : " << d1 << endl;
-        cout << "distance : " << distance << endl;
-        cout << "where : " << where << endl;
-        cout << "x : " << x << endl;
-        cout << "y : " << y << endl;
+    cout << "where : " << where << endl;
+    cout << "dstance : " << distance << endl;
+    cout << "distance - where : " << distance - where << endl;
 
+    while (where > 0){
+        //cout << "Speed : " << this->Speed << endl;
+        // cout << "t1 : " << t1 << endl;
+        // cout << "distance - where : " << distance - where << endl;
+        // cout << "d1 : " << d1 << endl;
+        // cout << "distance : " << distance << endl;
+        // cout << "where : " << where << endl;
+        // cout << "x : " << x << endl;
+        // cout << "y : " << y << endl;
+
+        float where = this->dist_next_station();
 
         if(distance >= (2 * d1)){
             t1;
@@ -125,19 +135,30 @@ int Rame::go_to_next_station(float acceleration, float t_mili){
 
             if(distance - where < d1){
                 //accelerate
+                cout << "Speed : " << this->Speed << endl;
+                cout << "x: " << this->x  << endl;
                 this->Speed = this->Speed + (acceleration * (t_mili/1000));
+                this->x = this->x + (acceleration * 0.5 * pow(t_mil/1000, 2));
 
             }
 
             else if(distance - where < d2){
                 //croisière
+                cout << "Speed : " << this->Speed << endl;
+                cout << "x: " << this->x  << endl;
                 this->Speed = this->Speed_max;
+                this->x = this-> x + this->Speed * (t_mil/1000);
             }
 
             else if(distance - where < d3){
                 //descelerate
+                cout << "Speed : " << this->Speed << endl;
+                cout << "x: " << this->x  << endl;
                 this->Speed = this->Speed - (acceleration * (t_mili/1000));
+                this->x = this->x + (acceleration * 0.5 * pow(t_mil/1000, 2));
             }
+
+            t_mil = t_mil + t_mili;
             
         }
         else{
@@ -145,7 +166,8 @@ int Rame::go_to_next_station(float acceleration, float t_mili){
         //accelerate
         //descelerate
         }
-        //this_thread::sleep_for(chrono::milliseconds(t_mili));
+        this_thread::sleep_for(1000ms);
+        
     }
     return EXIT_SUCCESS;
 }

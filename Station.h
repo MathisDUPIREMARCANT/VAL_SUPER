@@ -17,6 +17,7 @@ class Station {
         float x;
         float y;
         float distance;
+        float argument;
         int waiting_pass; // Personne en attente
         int max_pass;
         bool occupied; // Elle est occupé ?
@@ -31,6 +32,7 @@ class Station {
         void calculate_distance(vector<Station>& list);
         float distance_to(Station Other);
         float get_next_dist();
+        float get_next_arg();
         string get_name();
         float get_x();
         float get_y();

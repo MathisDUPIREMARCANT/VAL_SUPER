@@ -3,6 +3,7 @@
 #include <string>
 #include <thread>
 #include <mutex>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 #include "Station.h"
 
@@ -16,6 +17,7 @@ Station::Station(string const &name, const float &x, const float &y, const int &
     this->max_pass = 100;
     this->occupied = false;
     this->distance = 0;
+    this->argument = 0;
 }
 
 int Station::add_waiting(const int &nb) {
@@ -44,6 +46,11 @@ float Station::get_next_dist(){
     return this->distance;
 }
 
+float Station::get_next_arg()
+{
+    return this->argument;
+}
+
 void Station::connection(Station &Other) {
     
 }
@@ -63,8 +70,10 @@ float Station::get_y(){
 void Station::calculate_distance(vector<Station>& list) {
     for (size_t i = 0; i < list.size(); i++) {
         if (this->name == list[i].get_name()) {
-            this->distance = this->distance_to(list[(i+1)% list.size()]);
-            //cout << this->name << "  : " << this->distance << " : " << list[(i+1)% list.size()].get_name()<< endl;
+            auto next = list[(i+1)% list.size()];
+            this->distance = this->distance_to(next);
+            this->argument = atan((next.get_y() - this->y)/(next.get_x() - this->y));
+            cout << this->name << "  : module:" << this->distance << " : argument:" << this->argument << " : " << list[(i+1)% list.size()].get_name()<< endl;
         }
     }
 }

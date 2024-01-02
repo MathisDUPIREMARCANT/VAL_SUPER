@@ -140,10 +140,12 @@ int Rame::go_to_next_station(float acceleration, float t_ref){
                 //accelerate
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x  << endl;
+                cout << "y: " << this->y  << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
                 this->Speed = this->Speed + (acceleration * (t_ref/1000));
-                this->x = this->x + (this->Speed * (t_ref/1000));
+                this->x = this->x + ((this->Speed * (t_ref/1000)) / sqrt(1 + tan(this->Next_Station->get_next_arg())));
+                this->y = this->y + ((this->Speed * (t_ref/1000)) * (tan(this->Next_Station->get_next_arg()) / sqrt(1 + tan(this->Next_Station->get_next_arg()))));
 
             }
 
@@ -151,35 +153,45 @@ int Rame::go_to_next_station(float acceleration, float t_ref){
                 //croisière
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x  << endl;
+                cout << "y: " << this->y  << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
                 this->Speed = this->Speed_max;
-                this->x = this-> x + (this->Speed * (t_ref/1000));
+                this->x = this->x + ((this->Speed * (t_ref/1000)) / sqrt(1 + tan(this->Next_Station->get_next_arg())));
+                this->y = this->y + ((this->Speed * (t_ref/1000)) * (tan(this->Next_Station->get_next_arg()) / sqrt(1 + tan(this->Next_Station->get_next_arg()))));
             }
 
             else{
                 //descelerate
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x  << endl;
+                cout << "y: " << this->y  << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
                 this->Speed = this->Speed - (acceleration * (t_ref/1000));
-                this->x = this->x + (this->Speed * (t_ref/1000));
-            }
+                this->x = this->x + ((this->Speed * (t_ref/1000)) * (1 / sqrt(1 + tan(this->Next_Station->get_next_arg()))));
+                this->y = this->y + (
+                    (this->Speed * (t_ref/1000)) * 
+                    (tan(this->Next_Station->get_next_arg()) / 
+                    sqrt(1 + tan(this->Next_Station->get_next_arg()))));
+
+                }
             
             if(this->Speed < 0 || distance - where < 0){
                 this->Speed = 0;
                 this->x = this->Next_Station->get_x();
+                this->y = this->Next_Station->get_y();
 
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x  << endl;
+                cout << "y: " << this->y  << endl;
 
                 cout << this->Next_Station->get_name() << endl;
 
                 return EXIT_SUCCESS;
             }
             t_mil = t_mil + t_ref;
-            this_thread::sleep_for(10ms);
+            this_thread::sleep_for(100ms);
         }
 
     }
@@ -193,35 +205,43 @@ int Rame::go_to_next_station(float acceleration, float t_ref){
                 //accelerate
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x  << endl;
+                cout << "y: " << this->y  << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
                 this->Speed = this->Speed + (acceleration * (t_ref/1000));
-                this->x = this->x + (this->Speed * (t_ref/1000));
+                this->x = this->x + ((this->Speed * (t_ref/1000)) / sqrt(1 + tan(this->Next_Station->get_next_arg())));
+                this->y = this->y + ((this->Speed * (t_ref/1000)) * (tan(this->Next_Station->get_next_arg()) / sqrt(1 + tan(this->Next_Station->get_next_arg()))));
+
 
             }
             else{
                 //descelerate
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x  << endl;
+                cout << "y: " << this->y  << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
                 this->Speed = this->Speed - (acceleration * (t_ref/1000));
-                this->x = this->x + (this->Speed * (t_ref/1000));
+                this->x = this->x + ((this->Speed * (t_ref/1000)) / sqrt(1 + tan(this->Next_Station->get_next_arg())));
+                this->y = this->y + ((this->Speed * (t_ref/1000)) * (tan(this->Next_Station->get_next_arg()) / sqrt(1 + tan(this->Next_Station->get_next_arg()))));
+
             }
 
             if(this->Speed < 0 || distance - where < 0){
                 this->Speed = 0;
                 this->x = this->Next_Station->get_x();
+                this->y = this->Next_Station->get_y();
 
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x  << endl;
+                cout << "y: " << this->y  << endl;
 
                 cout << this->Next_Station->get_name() << endl;
 
                 return EXIT_SUCCESS;
             }
             t_mil = t_mil + t_ref;
-            this_thread::sleep_for(10ms);
+            this_thread::sleep_for(100ms);
 
         }
     }

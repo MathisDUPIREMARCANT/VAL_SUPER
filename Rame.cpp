@@ -16,10 +16,13 @@ using namespace std;
 // Constructor :
 Rame::Rame(string station, int Ligne, int Nb_pass_Max, vector<Rame>::iterator &RameList, vector<Station> &station_list) {
     
+    this->Next_Station = station_list.begin();
+
     for(int i = 0; i < station_list.size(); i++){
         if(station == station_list[i].get_name()){
             this->x = station_list[i].get_x();
             this->y = station_list[i].get_y();
+            this->Next_Station += i;
         }
     }
     
@@ -31,7 +34,7 @@ Rame::Rame(string station, int Ligne, int Nb_pass_Max, vector<Rame>::iterator &R
     this->Nb_pass = 0;
 
 
-    this->Next_Station = station_list.begin(); //à changer
+     //à changer
     
 
     // if (RameList.empty()){

@@ -37,12 +37,12 @@ int main(){
     }
 
     Rame Rame1 = Rame("Départ", 1, 10, L1_rame.begin(), L1);
-    Rame Rame2 = Rame("Quatre Cantons - Stade Pierre-Mauroy", 1, 10, L1_rame.begin(), L1);
+    Rame Rame2 = Rame("Départ", 1, 10, L1_rame.begin(), L1);
 
-    thread thread1(move_rame, Rame1, 10, 1.3, 5);
-    thread thread2(move_rame, Rame2, 10, 1.3, 4);
+    //thread thread1(move_rame, Rame1, 10, 1.3, 4);
+    thread thread2(move_rame, Rame2, 10, 1.3, 3);
 
-    thread1.join();
+    //thread1.join();
     thread2.join();
 
     // sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");

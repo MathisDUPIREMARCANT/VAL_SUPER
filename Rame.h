@@ -34,7 +34,7 @@ class Rame {
         int incomming_pass(const int &Nb);
         void arrive_Station(const string &station, map<string,bool>&station_occuped, vector<Station>station_list );
         void leave_station(const string &station, map<string,bool>&station_occuped, vector<Station> &table_station  );
-        int go_to_next_station(float acceleration, float t_ref);
+        int go_to_next_station(float acceleration, int t_ref);
         float dist_next_rame();
         float dist_next_station();
         float get_x();

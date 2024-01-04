@@ -39,7 +39,7 @@ int main(){
     Rame Rame1 = Rame("Départ", 1, 10, L1_rame.begin(), L1);
     Rame Rame2 = Rame("Départ", 1, 10, L1_rame.begin(), L1);
 
-    thread thread1(move_rame, Rame1, 100, 1.3, 4);
+    thread thread1(move_rame, Rame1, 10, 1.3, 4);
     //thread thread2(move_rame, Rame2, 10, 1.3, 3);
 
     thread1.join();

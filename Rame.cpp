@@ -164,8 +164,7 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
                 cout << "y: " << this->y << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
-                this->Speed = this->Speed + (acceleration * ((double) t_ref / 1000));
-                cout << "AAAAAAAAAAAAAAAAAAAA : " << this->Speed << " aaaaaaaaaaa : " << (acceleration * ((double) t_ref / 1000)) << endl;
+                this->Speed = this->Speed + (acceleration * ((double)t_ref / 1000));
             }
 
             else if (distance - where < d2 + d1)
@@ -186,10 +185,10 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
                 cout << "x: " << this->x << endl;
                 cout << "y: " << this->y << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
-                this->Speed = this->Speed - (acceleration * ((double) t_ref / 1000));
+                this->Speed = this->Speed - (acceleration * ((double)t_ref / 1000));
             }
-            this->x += (this->Speed / ((double) t_ref / 1000)) / (sqrt(1 + pow(tan(argument), 2)));
-            this->y += (this->Speed / ((double) t_ref / 1000)) * (tan(argument) / (sqrt(1 + pow(tan(argument), 2))));
+            this->x += (this->Speed * ((double)t_ref / 1000)) / (sqrt(1 + pow(tan(argument), 2)));
+            this->y += (this->Speed * ((double)t_ref / 1000)) * (tan(argument) / (sqrt(1 + pow(tan(argument), 2))));
 
             if (this->Speed < 0 || distance - where < 0)
             {
@@ -225,7 +224,7 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
                 cout << "y: " << this->y << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
-                this->Speed = this->Speed + (acceleration * ((double) t_ref / 1000));
+                this->Speed = this->Speed + (acceleration * ((double)t_ref / 1000));
             }
             else
             {
@@ -235,10 +234,10 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
                 cout << "y: " << this->y << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
-                this->Speed = this->Speed - (acceleration * ((double) t_ref / 1000));
+                this->Speed = this->Speed - (acceleration * ((double)t_ref / 1000));
             }
-            this->x += (this->Speed / ((double) t_ref / 1000)) / (sqrt(1 + pow(tan(argument), 2)));
-            this->y += (this->Speed / ((double) t_ref / 1000)) * (tan(argument) / (sqrt(1 + pow(tan(argument), 2))));
+            this->x += (this->Speed * ((double)t_ref / 1000)) / (sqrt(1 + pow(tan(argument), 2)));
+            this->y += (this->Speed * ((double)t_ref / 1000)) * (tan(argument) / (sqrt(1 + pow(tan(argument), 2))));
 
             if (this->Speed < 0 || distance - where < 0)
             {

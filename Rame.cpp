@@ -45,12 +45,12 @@ Rame::Rame(string station, int Ligne, int Nb_pass_Max, vector<Rame>::iterator &R
     // }
 }
 
-float Rame::get_x()
+double Rame::get_x()
 {
     return this->x;
 }
 
-float Rame::get_y()
+double Rame::get_y()
 {
     return this->y;
 }
@@ -103,7 +103,7 @@ void Rame::leave_station(const string &station, map<string, bool> &station_occup
     }
 }
 
-int Rame::go_to_next_station(float acceleration, int t_ref)
+int Rame::go_to_next_station(double acceleration, int t_ref)
 {
     if (!acceleration)
     {
@@ -113,15 +113,15 @@ int Rame::go_to_next_station(float acceleration, int t_ref)
     cout << "Speed : " << this->Speed << endl;
     cout << "Next : " << this->Next_Station->get_name() << endl;
 
-    float t1 = this->Speed_max / (float)acceleration;
-    float d1 = acceleration * 0.5 * pow(t1, 2);
+    double t1 = this->Speed_max / (double)acceleration;
+    double d1 = acceleration * 0.5 * pow(t1, 2);
 
     int t_mil = 0;
 
-    float distance = Next_Station->get_next_dist();
-    float argument = Next_Station->get_next_arg();
+    double distance = Next_Station->get_next_dist();
+    double argument = Next_Station->get_next_arg();
     this->Next_Station++;
-    float where = this->dist_next_station();
+    double where = this->dist_next_station();
 
     cout << "distance : " << distance << endl;
     cout << "x : " << this->x << " / y : " << this->y << endl;
@@ -129,11 +129,11 @@ int Rame::go_to_next_station(float acceleration, int t_ref)
     if (distance > (d1 * 2))
     {
 
-        float t3 = this->Speed_max / (float)acceleration;
-        float d3 = acceleration * 0.5 * pow(t3, 2);
+        double t3 = this->Speed_max / (double)acceleration;
+        double d3 = acceleration * 0.5 * pow(t3, 2);
 
-        float d2 = distance - d1 - d3;
-        // float t2 = (distance - (2.0*d1)) / this->Speed_max;
+        double d2 = distance - d1 - d3;
+        // double t2 = (distance - (2.0*d1)) / this->Speed_max;
 
         cout << "distance : " << distance << endl;
         cout << "where : " << where << endl;
@@ -155,7 +155,7 @@ int Rame::go_to_next_station(float acceleration, int t_ref)
             // cout << "cos : " << cos(this->Next_Station->get_next_arg()) << " & sin : " << sin(this->Next_Station->get_next_arg()) << endl;
             // cout << "arg : " << this->Next_Station->get_next_arg() << endl;
 
-            float where = this->dist_next_station();
+            double where = this->dist_next_station();
             if (distance - where < d1)
             {
                 // accelerate
@@ -164,7 +164,8 @@ int Rame::go_to_next_station(float acceleration, int t_ref)
                 cout << "y: " << this->y << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
-                this->Speed = this->Speed + (acceleration * (t_ref / 1000));
+                this->Speed = this->Speed + (acceleration * ((double) t_ref / 1000));
+                cout << "AAAAAAAAAAAAAAAAAAAA : " << this->Speed << " aaaaaaaaaaa : " << (acceleration * ((double) t_ref / 1000)) << endl;
             }
 
             else if (distance - where < d2 + d1)
@@ -185,12 +186,12 @@ int Rame::go_to_next_station(float acceleration, int t_ref)
                 cout << "x: " << this->x << endl;
                 cout << "y: " << this->y << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
-                this->Speed = this->Speed - (acceleration * (t_ref / 1000));
+                this->Speed = this->Speed - (acceleration * ((double) t_ref / 1000));
             }
-            this->x += (this->Speed / (t_ref / 1000)) / (sqrt(1 + pow(tan(argument), 2)));
-            this->y += (this->Speed / (t_ref / 1000)) * (tan(argument) / (sqrt(1 + pow(tan(argument), 2))));
+            this->x += (this->Speed / ((double) t_ref / 1000)) / (sqrt(1 + pow(tan(argument), 2)));
+            this->y += (this->Speed / ((double) t_ref / 1000)) * (tan(argument) / (sqrt(1 + pow(tan(argument), 2))));
 
-            if (this->Speed < 0 || distance - where < 0.001)
+            if (this->Speed < 0 || distance - where < 0)
             {
                 this->Speed = 0;
                 this->x = this->Next_Station->get_x();
@@ -210,12 +211,12 @@ int Rame::go_to_next_station(float acceleration, int t_ref)
     }
     else
     {
-        float d0 = distance / 2.0;
+        double d0 = distance / 2.0;
         cout << "d0 : " << d0 << endl;
 
         while (where > 0)
         {
-            float where = this->dist_next_station();
+            double where = this->dist_next_station();
             if (distance - where < d0)
             {
                 // accelerate
@@ -224,7 +225,7 @@ int Rame::go_to_next_station(float acceleration, int t_ref)
                 cout << "y: " << this->y << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
-                this->Speed = this->Speed + (acceleration * (t_ref / 1000));
+                this->Speed = this->Speed + (acceleration * ((double) t_ref / 1000));
             }
             else
             {
@@ -234,12 +235,12 @@ int Rame::go_to_next_station(float acceleration, int t_ref)
                 cout << "y: " << this->y << endl;
                 // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
 
-                this->Speed = this->Speed - (acceleration * (t_ref / 1000));
+                this->Speed = this->Speed - (acceleration * ((double) t_ref / 1000));
             }
-            this->x += (this->Speed / (t_ref / 1000)) / (sqrt(1 + pow(tan(argument), 2)));
-            this->y += (this->Speed / (t_ref / 1000)) * (tan(argument) / (sqrt(1 + pow(tan(argument), 2))));
+            this->x += (this->Speed / ((double) t_ref / 1000)) / (sqrt(1 + pow(tan(argument), 2)));
+            this->y += (this->Speed / ((double) t_ref / 1000)) * (tan(argument) / (sqrt(1 + pow(tan(argument), 2))));
 
-            if (this->Speed < 0 || distance - where < 0.001)
+            if (this->Speed < 0 || distance - where < 0)
             {
                 this->Speed = 0;
                 this->x = this->Next_Station->get_x();
@@ -261,11 +262,11 @@ int Rame::go_to_next_station(float acceleration, int t_ref)
     return EXIT_SUCCESS;
 }
 
-float Rame::dist_next_rame()
+double Rame::dist_next_rame()
 {
     return sqrt(pow(Next_Rame->get_x() - this->x, 2) + pow(Next_Rame->get_y() - this->y, 2));
 }
-float Rame::dist_next_station()
+double Rame::dist_next_station()
 {
     // cout << "this->Next_Station->get_x() : " << this->Next_Station->get_x() << endl;
     // cout << "this->Next_Station->get_y() : " << this->Next_Station->get_y() << endl;

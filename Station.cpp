@@ -9,7 +9,7 @@
 
 using namespace std;
 
-Station::Station(string const &name, const float &x, const float &y, const int &max_pass){
+Station::Station(string const &name, const double &x, const double &y, const int &max_pass){
     this->name = name;
     this->x = x;
     this->y = y;
@@ -33,7 +33,7 @@ void Station::leaves() {
     this->occupied = false;
 }
 
-float Station::distance_to(Station Other) {
+double Station::distance_to(Station Other) {
     // cout << "this->x : " << this->x << endl;
     // cout << "this->y : " << this->y << endl;
     // cout << "Other->x : " << Other.x << endl;
@@ -42,11 +42,11 @@ float Station::distance_to(Station Other) {
     return sqrt(pow(Other.x - this->x, 2) + pow(Other.y - this->y, 2));
 }
 
-float Station::get_next_dist(){
+double Station::get_next_dist(){
     return this->distance;
 }
 
-float Station::get_next_arg()
+double Station::get_next_arg()
 {
     return this->argument;
 }
@@ -59,11 +59,11 @@ string Station::get_name(){
     return this->name;
 }
 
-float Station::get_x(){
+double Station::get_x(){
     return this->x;
 }
 
-float Station::get_y(){
+double Station::get_y(){
     return this->y;
 }
 

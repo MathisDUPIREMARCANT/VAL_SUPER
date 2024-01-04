@@ -8,4 +8,4 @@
 #include "Rame.h"
 
 vector<Rame> init_rame(vector<Station> stations, vector<int> lignes, vector<int> capacity, vector<Rame> &RameList);
-void move_rame(Rame rame, float t_ref, float acceleration, int nb_station);
+void move_rame(Rame rame, double t_ref, double acceleration, int nb_station);

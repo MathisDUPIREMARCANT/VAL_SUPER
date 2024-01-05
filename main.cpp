@@ -45,22 +45,42 @@ int main(){
     thread1.join();
     //thread2.join();
 
-    // sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    // sf::CircleShape shape(100.f);
-    // shape.setFillColor(sf::Color::Green);
+       // Créer une fenêtre SFML
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Déplacement carré");
 
-    // while (window.isOpen())
-    // {
-    //     sf::Event event;
-    //     while (window.pollEvent(event))
-    //     {
-    //         if (event.type == sf::Event::Closed)
-    //             window.close();
-    //     }
+    // Créer un carré
+    sf::RectangleShape square(sf::Vector2f(50.0f, 50.0f));
+    square.setFillColor(sf::Color::Green);
 
-    //     window.clear();
-    //     window.draw(shape);
-    //     window.display();
-    // }
+    // Position initiale du carré
+    float x = 0.0f;
+    float y = 300.0f; // Position verticale 
+
+    while (window.isOpen())
+    {
+        // Gére les événements
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        // Augmente la valeur de x et y de 0.5 à chaque itération
+        x += 0.5f;
+        y += 0.2f;
+
+        // Défini la nouvelle position du carré
+        square.setPosition(x, y);
+
+        // Efface l'écran
+        window.clear();
+
+        // Dessine le carré
+        window.draw(square);
+
+        // Affiche le contenu de la fenêtre
+        window.display();
+    }
     return 0;
 }

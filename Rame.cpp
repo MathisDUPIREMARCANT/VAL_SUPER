@@ -293,10 +293,17 @@ double Rame::get_arg(vector<Station> &station_list)
     {
         if (station_list[i].get_name() == this->Next_Station->get_name())
         {
-            if (this->Next_Station->get_occupied())
+            auto where = this->dist_next_station();
+            if(where < 20){
+                return ((where * station_list[i - 1].get_next_arg() * 180 / 3.14) + (20 - where) * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
+            }
+            else if (this->Next_Station->get_occupied())
             {
                 return ((station_list[i - 1].get_next_arg() * 180 / 3.14) + this->Next_Station->get_next_arg() * 180 / 3.14) / 2;
             }
+//             else if(this->dist_next_station() - where < 20){
+// return (((20 - where) * station_list[i - 1].get_next_arg() * 180 / 3.14) + where * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
+//             }
             else
             {
                 return station_list[i - 1].get_next_arg() * 180 / 3.14;

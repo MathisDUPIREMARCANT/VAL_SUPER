@@ -74,12 +74,12 @@ int main()
         sf::RectangleShape r1(sf::Vector2f(30.0f, 10.0f));
         r1.setFillColor(sf::Color::Red);
         r1.setRotation(Rame1.get_arg(L1));
-        r1.setPosition(Rame1.get_x()+10, Rame1.get_y()+5);
+        r1.setPosition(Rame1.get_x()+15, Rame1.get_y()+5);
 
         sf::RectangleShape r2(sf::Vector2f(30.0f, 10.0f));
         r2.setFillColor(sf::Color::Red);
         r2.setRotation(Rame2.get_arg(L1));
-        r2.setPosition(Rame2.get_x()+10, Rame2.get_y()+5);
+        r2.setPosition(Rame2.get_x()+15, Rame2.get_y()+5);
 
         window.draw(r1);
         window.draw(r2);

@@ -56,7 +56,7 @@ void Rame::leaving_pass(const int &Nb)
     {
         this->Nb_pass--;
         cout << "this-Nb_pass : " << this->Nb_pass << endl;
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::milliseconds(300));
     }
 }
 void Rame::incomming_pass(const int &Nb)
@@ -66,7 +66,7 @@ void Rame::incomming_pass(const int &Nb)
         this->Nb_pass++;
         this->Next_Station->decrease_pass();
         cout << "this-Nb_pass : " << this->Nb_pass << endl;
-        this_thread::sleep_for(chrono::seconds(1));
+        this_thread::sleep_for(chrono::milliseconds(300));
     }
 }
 void Rame::arrive_Station(vector<Station>::iterator &station, vector<Station> &station_list)
@@ -276,21 +276,31 @@ double Rame::dist_next_station()
     return sqrt(pow(this->Next_Station->get_x() - this->x, 2) + pow(this->Next_Station->get_y() - this->y, 2));
 }
 
-void Rame::draw(sf::RenderWindow& window) const{
+void Rame::draw(sf::RenderWindow &window) const
+{
     // Créer un carré
-        sf::RectangleShape square(sf::Vector2f(50.0f, 50.0f));
-        square.setFillColor(sf::Color::Red);
+    sf::RectangleShape square(sf::Vector2f(50.0f, 50.0f));
+    square.setFillColor(sf::Color::Red);
 
-        square.setPosition(this->x, this->y);
+    square.setPosition(this->x, this->y);
 
-        window.draw(square);
+    window.draw(square);
 }
 
 double Rame::get_arg(vector<Station> &station_list)
 {
-    for(int i = 0; i < station_list.size(); i++){
-        if(station_list[i].get_name() == this->Next_Station->get_name()){
-            return station_list[i-1].get_next_arg() * 180 / 3.14;
+    for (int i = 0; i < station_list.size(); i++)
+    {
+        if (station_list[i].get_name() == this->Next_Station->get_name())
+        {
+            if (this->Next_Station->get_occupied())
+            {
+                return ((station_list[i - 1].get_next_arg() * 180 / 3.14) + this->Next_Station->get_next_arg() * 180 / 3.14) / 2;
+            }
+            else
+            {
+                return station_list[i - 1].get_next_arg() * 180 / 3.14;
+            }
         }
     }
     return 0;

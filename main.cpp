@@ -11,6 +11,8 @@
 
 using namespace std;
 
+mutex mutex;
+
 int main()
 {
     vector<Station> L1;
@@ -46,7 +48,8 @@ int main()
     Rame Rame1 = Rame("Départ", 1, 30, L1_rame.begin(), L1);
     Rame Rame2 = Rame("Quatre Cantons - Stade Pierre-Mauroy", 1, 30, L1_rame.begin(), L1);
 
-    thread thread1(move_rame, Rame1, 100, 1.3, 8, L1);
+    thread thread1(move_rame, ref(Rame1), 16, 1.3, 8, L1);
+    thread thread2(move_rame, ref(Rame2), 16, 1.3, 9, L1);
 
     while (window.isOpen())
     {
@@ -60,16 +63,32 @@ int main()
 
         window.clear();
 
-        // Créer un carré
-        sf::RectangleShape square(sf::Vector2f(50.0f, 50.0f));
-        square.setFillColor(sf::Color::Green);
+        for(auto start = L1.begin(); start != L1.end(); start++){
+            sf::CircleShape station;
+            station.setRadius(20);
+            station.setFillColor(sf::Color::Green);
+            station.setPosition(start->get_x()-20, start->get_y()-20);
+            window.draw(station);
+        }
 
-        square.setPosition(Rame1.get_x(), Rame1.get_y());
+        sf::RectangleShape r1(sf::Vector2f(30.0f, 10.0f));
+        r1.setFillColor(sf::Color::Red);
+        r1.setRotation(Rame1.get_arg(L1));
+        r1.setPosition(Rame1.get_x(), Rame1.get_y());
 
-        // thread thread2(move_rame, Rame2, 16, 1.3, 9, L1);
+        sf::RectangleShape r2(sf::Vector2f(30.0f, 10.0f));
+        r2.setFillColor(sf::Color::Red);
+        r2.setRotation(Rame2.get_arg(L2));
+        r2.setPosition(Rame2.get_x(), Rame2.get_y());
+
+        window.draw(r1);
+        window.draw(r2);
+
+        window.display();
+
     }
     thread1.join();
-    // thread2.join();
+    thread2.join();
 
     return 0;
 }

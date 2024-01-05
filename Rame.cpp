@@ -9,7 +9,6 @@
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include "Rame.h"
-// #include "Station.h"
 
 using namespace std;
 
@@ -31,19 +30,12 @@ Rame::Rame(string station, int Ligne, int Nb_pass_Max, vector<Rame>::iterator &R
 
     this->Speed = 0;
     this->Speed_max = 19.5;
-    // this->Id = RameList.size();
     this->Ligne = Ligne;
     this->Nb_pass_Max = Nb_pass_Max;
     this->Nb_pass = 0;
 
-    // à changer
-
-    // if (RameList.empty()){
-    //     this->Next_Rame = NULL;
-    // }
-    // else{
-    //     this->Next_Rame = RameList.back();
-    // }
+    float x = 0.0f;
+    float y = 300.0f;
 }
 
 double Rame::get_x()
@@ -105,6 +97,8 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
         return -1;
     }
 
+    
+
     cout << "Speed : " << this->Speed << endl;
     cout << "Next : " << this->Next_Station->get_name() << endl;
 
@@ -113,6 +107,7 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
 
     double distance = Next_Station->get_next_dist();
     double argument = Next_Station->get_next_arg();
+    auto degree = argument * 180 / 3.14;
 
     // if (this->Next_Station == station_list.end())
     // {
@@ -124,8 +119,11 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
     // }
     double where = this->dist_next_station();
 
-    cout << "distance : " << distance << endl;
-    cout << "x : " << this->x << " / y : " << this->y << endl;
+    cout << "Name : " << this->Next_Station->get_name() << endl;
+    cout << "Argument : " << argument * 180 / 3.14 << endl;
+    cout << "Argument : " << argument << endl;
+
+    // return EXIT_SUCCESS;
 
     if (distance > (d1 * 2))
     {
@@ -167,10 +165,11 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
                 cout << "y: " << this->y << endl;
                 this->Speed = this->Speed - (acceleration * ((double)t_ref / 1000));
             }
-            this->x += (this->Speed * ((double)t_ref / 1000)) / (sqrt(1 + pow(tan(argument), 2)));
-            this->y += (this->Speed * ((double)t_ref / 1000)) * (tan(argument) / (sqrt(1 + pow(tan(argument), 2))));
 
-            if (this->Speed < 0 || distance - where < 0)
+            this->y += (this->Speed * ((double)t_ref / 1000)) * sin(argument);
+            this->x += (this->Speed * ((double)t_ref / 1000)) * cos(argument);
+
+            if (this->Speed < 0 || distance - where >= distance)
             {
                 this->Speed = 0;
                 this->x = this->Next_Station->get_x();
@@ -228,10 +227,11 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
                 cout << "y: " << this->y << endl;
                 this->Speed = this->Speed - (acceleration * ((double)t_ref / 1000));
             }
-            this->x += (this->Speed * ((double)t_ref / 1000)) / (sqrt(1 + pow(tan(argument), 2)));
-            this->y += (this->Speed * ((double)t_ref / 1000)) * (tan(argument) / (sqrt(1 + pow(tan(argument), 2))));
 
-            if (this->Speed < 0 || distance - where < 0)
+            this->y += (this->Speed * ((double)t_ref / 1000)) * sin(argument);
+            this->x += (this->Speed * ((double)t_ref / 1000)) * cos(argument);
+
+            if (this->Speed < 0 || distance - where >= distance)
             {
                 this->Speed = 0;
                 this->x = this->Next_Station->get_x();

@@ -7,11 +7,13 @@
 #include <random>
 #include <SFML/Graphics.hpp>
 #include "Station.h"
+#include "function.h"
 
 using namespace std;
 
-Station::Station(string const &name, const double &x, const double &y, const int &max_pass)
+Station::Station(string const &name, const double &x, const double &y, const int &max_pass, vector<double> map_size)
 {
+    auto coordonates = mercatorProjection(x, y, map_size[0], map_size[1]);
     this->name = name;
     this->x = x;
     this->y = y;
@@ -95,7 +97,9 @@ void Station::calculate_distance(vector<Station> &list)
         {
             auto next = list[(i + 1) % list.size()];
             this->distance = this->distance_to(next);
-            this->argument = atan((next.get_y() - this->y) / (next.get_x() - this->y));
+            auto a = next.get_x() - this->x;
+            auto b = next.get_y() - this->y;
+            this->argument = atan2(b, a);
             cout << this->name << "  : module:" << this->distance << " : argument:" << this->argument << " : " << list[(i + 1) % list.size()].get_name() << endl;
         }
     }

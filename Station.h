@@ -21,7 +21,7 @@ private:
     bool occupied; // Elle est occupé ?
 
 public:
-    Station(const string &name, const double &x, const double &y, const int &max_pass);
+    Station(const string &name, const double &x, const double &y, const int &max_pass, vector<double> map_size);
 
     int add_waiting(const int &nb);
     int get_max();

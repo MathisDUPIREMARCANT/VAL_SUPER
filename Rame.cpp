@@ -5,6 +5,7 @@
 #include <thread>
 #include <mutex>
 #include <cmath>
+#include <random>
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include "Rame.h"
@@ -55,55 +56,49 @@ double Rame::get_y()
     return this->y;
 }
 
-int Rame::leaving_pass(const int &Nb)
+void Rame::leaving_pass(const int &Nb)
 {
-    this->Nb_pass -= Nb;
-
-    return Nb;
-}
-int Rame::incomming_pass(const int &Nb)
-{
-    this->Nb_pass += Nb;
-
-    return Nb;
-}
-void Rame::arrive_Station(const string &station, map<string, bool> &station_occuped, vector<Station> station_list)
-{
-    if (station_occuped.at(station) == false)
+    for (int i = 0; i < Nb; i++)
     {
-        station_occuped[station] = true;
-        ++this->Next_Station;
-        if (this->Next_Station == station_list.end())
-        {
-            this->Next_Station = station_list.begin();
-        }
+        this->Nb_pass--;
+        cout << "this-Nb_pass : " << this->Nb_pass << endl;
+        this_thread::sleep_for(chrono::seconds(1));
     }
-    else if (station_occuped.at(station) == true)
+}
+void Rame::incomming_pass(const int &Nb)
+{
+    for (int i = Nb; i > 0; i--)
     {
-        cout << "ERROR : Station occuped" << endl;
+        this->Nb_pass++;
+        this->Next_Station->decrease_pass();
+        cout << "this-Nb_pass : " << this->Nb_pass << endl;
+        this_thread::sleep_for(chrono::seconds(1));
+    }
+}
+void Rame::arrive_Station(vector<Station>::iterator &station, vector<Station> &station_list)
+{
+    if (this->Next_Station->get_occupied() == false)
+    {
+        this->Next_Station->change_occupied(true);
     }
     else
     {
-        cout << "ERROR in fucntion arrive_Station" << endl;
+        cout << "err" << endl;
     }
 }
-void Rame::leave_station(const string &station, map<string, bool> &station_occuped, vector<Station> &table_station)
+void Rame::leave_station(vector<Station>::iterator &station, vector<Station> &station_list)
 {
-    if (station_occuped.at(station) == true)
+    if (this->Next_Station->get_occupied() == true)
     {
-        station_occuped[station] = false;
-    }
-    else if (station_occuped.at(station) == false)
-    {
-        cout << "ERROR : Station is already not occuped" << endl;
+        this->Next_Station->change_occupied(false);
     }
     else
     {
-        cout << "ERROR in fucntion arrive_Station" << endl;
+        cout << "err" << endl;
     }
 }
 
-int Rame::go_to_next_station(double acceleration, int t_ref)
+int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &station_list)
 {
     if (!acceleration)
     {
@@ -116,11 +111,17 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
     double t1 = this->Speed_max / (double)acceleration;
     double d1 = acceleration * 0.5 * pow(t1, 2);
 
-    int t_mil = 0;
-
     double distance = Next_Station->get_next_dist();
     double argument = Next_Station->get_next_arg();
+
+    // if (this->Next_Station == station_list.end())
+    // {
+    //     this->Next_Station = station_list.begin();
+    // }
+    // else
+    // {
     this->Next_Station++;
+    // }
     double where = this->dist_next_station();
 
     cout << "distance : " << distance << endl;
@@ -133,28 +134,12 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
         double d3 = acceleration * 0.5 * pow(t3, 2);
 
         double d2 = distance - d1 - d3;
-        // double t2 = (distance - (2.0*d1)) / this->Speed_max;
 
         cout << "distance : " << distance << endl;
         cout << "where : " << where << endl;
 
-        // cout << "t1 : " << t1 << endl;
-        // //cout << "t2 : " << t2 << endl;
-        // cout << "t3 : " << t3 << endl;
-        // cout << "d1 : " << d1 << endl;
-        // cout << "d2 : " << d2 << endl;
-        // cout << "d3 : " << d3 << endl;
-
-        // string name = "speed.csv";
-        // ofstream file(name);
-        // if (file.is_open()){
-        //     file << "Speed;x;t"<<endl;
-
         while (where > 0)
         {
-            // cout << "cos : " << cos(this->Next_Station->get_next_arg()) << " & sin : " << sin(this->Next_Station->get_next_arg()) << endl;
-            // cout << "arg : " << this->Next_Station->get_next_arg() << endl;
-
             double where = this->dist_next_station();
             if (distance - where < d1)
             {
@@ -162,8 +147,6 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x << endl;
                 cout << "y: " << this->y << endl;
-                // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
-
                 this->Speed = this->Speed + (acceleration * ((double)t_ref / 1000));
             }
 
@@ -173,8 +156,6 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x << endl;
                 cout << "y: " << this->y << endl;
-                // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
-
                 this->Speed = this->Speed_max;
             }
 
@@ -184,7 +165,6 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x << endl;
                 cout << "y: " << this->y << endl;
-                // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
                 this->Speed = this->Speed - (acceleration * ((double)t_ref / 1000));
             }
             this->x += (this->Speed * ((double)t_ref / 1000)) / (sqrt(1 + pow(tan(argument), 2)));
@@ -202,9 +182,25 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
 
                 cout << this->Next_Station->get_name() << endl;
 
+                this->arrive_Station(this->Next_Station, station_list);
+
+                random_device rd;
+                mt19937 generator(rd());
+                uniform_int_distribution<int> distribution_leave(0, this->Nb_pass);
+
+                int nb = distribution_leave(generator);
+                this->leaving_pass(nb);
+
+                uniform_int_distribution<int> distribution_arrive(this->Nb_pass, this->Nb_pass_Max);
+                nb = distribution_arrive(generator);
+                this->incomming_pass(min(nb, this->Next_Station->get_max()));
+
+                this->leave_station(this->Next_Station, station_list);
+
+                this->Next_Station->increase_pass();
+
                 return EXIT_SUCCESS;
             }
-            t_mil = t_mil + t_ref;
             this_thread::sleep_for(chrono::milliseconds(t_ref));
         }
     }
@@ -222,8 +218,6 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x << endl;
                 cout << "y: " << this->y << endl;
-                // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
-
                 this->Speed = this->Speed + (acceleration * ((double)t_ref / 1000));
             }
             else
@@ -232,8 +226,6 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
                 cout << "Speed : " << this->Speed << endl;
                 cout << "x: " << this->x << endl;
                 cout << "y: " << this->y << endl;
-                // file << this->Speed << ";" << this->x << ";" << t_mil/1000 << endl;
-
                 this->Speed = this->Speed - (acceleration * ((double)t_ref / 1000));
             }
             this->x += (this->Speed * ((double)t_ref / 1000)) / (sqrt(1 + pow(tan(argument), 2)));
@@ -251,9 +243,24 @@ int Rame::go_to_next_station(double acceleration, int t_ref)
 
                 cout << this->Next_Station->get_name() << endl;
 
+                this->arrive_Station(this->Next_Station, station_list);
+
+                random_device rd;
+                mt19937 generator(rd());
+                uniform_int_distribution<int> distribution_leave(0, this->Nb_pass);
+
+                int nb = distribution_leave(generator);
+                cout << "AAAAAAAAAAAAAA : " << nb << endl;
+                this->leaving_pass(nb);
+
+                uniform_int_distribution<int> distribution_arrive(this->Nb_pass, this->Nb_pass_Max);
+                nb = distribution_arrive(generator);
+                this->incomming_pass(nb);
+
+                this->leave_station(this->Next_Station, station_list);
+
                 return EXIT_SUCCESS;
             }
-            t_mil = t_mil + t_ref;
             this_thread::sleep_for(chrono::milliseconds(t_ref));
         }
     }
@@ -267,10 +274,5 @@ double Rame::dist_next_rame()
 }
 double Rame::dist_next_station()
 {
-    // cout << "this->Next_Station->get_x() : " << this->Next_Station->get_x() << endl;
-    // cout << "this->Next_Station->get_y() : " << this->Next_Station->get_y() << endl;
-    // cout << "this->x : " << this->x << endl;
-    // cout << "this->y : " << this->y << endl;
-
     return sqrt(pow(this->Next_Station->get_x() - this->x, 2) + pow(this->Next_Station->get_y() - this->y, 2));
 }

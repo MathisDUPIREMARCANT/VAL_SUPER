@@ -19,7 +19,7 @@ void move_rame(Rame &rame, double t_ref, double acceleration, int nb_station, ve
     // wrapper
 
     for (int i = 0; i < nb_station; i++)
-    {
+    {        
         rame.go_to_next_station(acceleration, t_ref, station_list);
 
         cout << "AAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAA\nAAAAAAAAAAA" << endl;

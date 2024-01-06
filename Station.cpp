@@ -22,6 +22,7 @@ Station::Station(string const &name, const double &x, const double &y, const int
     this->occupied = false;
     this->distance = 0;
     this->argument = 0;
+    this->leaving = true;
 }
 
 int Station::add_waiting(const int &nb)
@@ -119,4 +120,12 @@ void Station::increase_pass()
     int nb = distribution_leave(generator);
 
     this->waiting_pass += nb;
+}
+
+void Station::change_leaving(int etat){
+    this->leaving = etat;
+}
+
+int Station::get_leaving(){
+    return this->leaving;
 }

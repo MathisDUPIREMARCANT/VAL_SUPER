@@ -33,9 +33,6 @@ Rame::Rame(string station, int Ligne, int Nb_pass_Max, vector<Rame>::iterator &R
     this->Ligne = Ligne;
     this->Nb_pass_Max = Nb_pass_Max;
     this->Nb_pass = 0;
-
-    float x = 0.0f;
-    float y = 300.0f;
 }
 
 double Rame::get_x()
@@ -52,22 +49,28 @@ double Rame::get_y()
 
 void Rame::leaving_pass(const int &Nb)
 {
+    this->Next_Station->change_leaving(1);
     for (int i = 0; i < Nb; i++)
     {
         this->Nb_pass--;
         cout << "this-Nb_pass : " << this->Nb_pass << endl;
-        this_thread::sleep_for(chrono::milliseconds(300));
+        this_thread::sleep_for(chrono::milliseconds(500));
     }
+    this->Next_Station->change_leaving(0);
+    this_thread::sleep_for(chrono::milliseconds(500));
 }
 void Rame::incomming_pass(const int &Nb)
 {
+    this->Next_Station->change_leaving(2);
     for (int i = Nb; i > 0; i--)
     {
         this->Nb_pass++;
         this->Next_Station->decrease_pass();
         cout << "this-Nb_pass : " << this->Nb_pass << endl;
-        this_thread::sleep_for(chrono::milliseconds(300));
+        this_thread::sleep_for(chrono::milliseconds(500));
     }
+    this->Next_Station->change_leaving(0);
+    this_thread::sleep_for(chrono::milliseconds(500));
 }
 void Rame::arrive_Station(vector<Station>::iterator &station, vector<Station> &station_list)
 {
@@ -118,6 +121,11 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
     this->Next_Station++;
     // }
     double where = this->dist_next_station();
+
+    while (this->Next_Station->get_occupied() == true)
+    {
+        this_thread::sleep_for(chrono::milliseconds(300));
+    }
 
     // cout << "Name : " << this->Next_Station->get_name() << endl;
     // cout << "Argument : " << argument * 180 / 3.14 << endl;
@@ -294,16 +302,17 @@ double Rame::get_arg(vector<Station> &station_list)
         if (station_list[i].get_name() == this->Next_Station->get_name())
         {
             auto where = this->dist_next_station();
-            if(where < 20){
+            if (where < 20)
+            {
                 return ((where * station_list[i - 1].get_next_arg() * 180 / 3.14) + (20 - where) * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
             }
             else if (this->Next_Station->get_occupied())
             {
                 return ((station_list[i - 1].get_next_arg() * 180 / 3.14) + this->Next_Station->get_next_arg() * 180 / 3.14) / 2;
             }
-//             else if(this->dist_next_station() - where < 20){
-// return (((20 - where) * station_list[i - 1].get_next_arg() * 180 / 3.14) + where * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
-//             }
+            //             else if(this->dist_next_station() - where < 20){
+            // return (((20 - where) * station_list[i - 1].get_next_arg() * 180 / 3.14) + where * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
+            //             }
             else
             {
                 return station_list[i - 1].get_next_arg() * 180 / 3.14;

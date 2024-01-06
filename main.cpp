@@ -63,29 +63,50 @@ int main()
 
         window.clear();
 
-        for(auto start = L1.begin(); start != L1.end(); start++){
+        for (auto start = L1.begin(); start != L1.end(); start++)
+        {
             sf::CircleShape station;
             station.setRadius(20);
-            station.setFillColor(sf::Color::Green);
-            station.setPosition(start->get_x()-20, start->get_y()-20);
+            if (start->get_occupied() == true)
+            {
+                if (start->get_leaving() == 1)
+                {
+                    station.setFillColor(sf::Color::Yellow);
+                    // 2 personnes sortent du train par secondes
+                }
+                else if (start->get_leaving() == 2)
+                {
+                    station.setFillColor(sf::Color::White);
+                    // 2 personnes entrent dans le train par secondes
+                }
+                else
+                {
+                    station.setFillColor(sf::Color::Blue);
+                }
+            }
+            else
+            {
+                station.setFillColor(sf::Color::Green);
+            }
+
+            station.setPosition(start->get_x() - 20, start->get_y() - 20);
             window.draw(station);
         }
 
         sf::RectangleShape r1(sf::Vector2f(30.0f, 10.0f));
         r1.setFillColor(sf::Color::Red);
         r1.setRotation(Rame1.get_arg(L1));
-        r1.setPosition(Rame1.get_x()+15, Rame1.get_y()+5);
+        r1.setPosition(Rame1.get_x() + 15, Rame1.get_y() + 5);
 
         sf::RectangleShape r2(sf::Vector2f(30.0f, 10.0f));
         r2.setFillColor(sf::Color::Red);
         r2.setRotation(Rame2.get_arg(L1));
-        r2.setPosition(Rame2.get_x()+15, Rame2.get_y()+5);
+        r2.setPosition(Rame2.get_x() + 15, Rame2.get_y() + 5);
 
         window.draw(r1);
         window.draw(r2);
 
         window.display();
-
     }
     thread1.join();
     thread2.join();

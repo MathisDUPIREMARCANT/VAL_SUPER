@@ -95,15 +95,12 @@ void Rame::leave_station(vector<Station>::iterator &station, vector<Station> &st
     }
 }
 
-int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &station_list)
+int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &station_list, Bouton &urgence)
 {
     if (!acceleration)
     {
         return -1;
     }
-
-    //     cout << "Speed : " << this->Speed << endl;
-    // cout << "Next : " << this->Next_Station->get_name() << endl;
 
     double t1 = this->Speed_max / (double)acceleration;
     double d1 = acceleration * 0.5 * pow(t1, 2);
@@ -121,17 +118,12 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
     this->Next_Station++;
     // }
     double where = this->dist_next_station();
+    bool pressed_urgence = urgence.get_etat();
 
-    while (this->Next_Station->get_occupied() == true)
+    while (this->Next_Station->get_occupied() == true || pressed_urgence == true)
     {
         this_thread::sleep_for(chrono::milliseconds(300));
     }
-
-    // cout << "Name : " << this->Next_Station->get_name() << endl;
-    // cout << "Argument : " << argument * 180 / 3.14 << endl;
-    // cout << "Argument : " << argument << endl;
-
-    // return EXIT_SUCCESS;
 
     if (distance > (d1 * 2))
     {
@@ -141,36 +133,27 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
 
         double d2 = distance - d1 - d3;
 
-        // cout << "distance : " << distance << endl;
-        // cout << "where : " << where << endl;
-
         while (where > 0)
         {
             double where = this->dist_next_station();
             if (distance - where < d1)
             {
                 // accelerate
-                // cout << "Speed : " << this->Speed << endl;
-                // cout << "x: " << this->x << endl;
-                // cout << "y: " << this->y << endl;
+
                 this->Speed = this->Speed + (acceleration * ((double)t_ref / 1000));
             }
 
             else if (distance - where < d2 + d1)
             {
                 // croisière
-                // cout << "Speed : " << this->Speed << endl;
-                // cout << "x: " << this->x << endl;
-                // cout << "y: " << this->y << endl;
+
                 this->Speed = this->Speed_max;
             }
 
             else
             {
                 // descelerate
-                // cout << "Speed : " << this->Speed << endl;
-                // cout << "x: " << this->x << endl;
-                // cout << "y: " << this->y << endl;
+
                 this->Speed = this->Speed - (acceleration * ((double)t_ref / 1000));
             }
 
@@ -182,12 +165,6 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
                 this->Speed = 0;
                 this->x = this->Next_Station->get_x();
                 this->y = this->Next_Station->get_y();
-
-                // cout << "Speed : " << this->Speed << endl;
-                // cout << "x: " << this->x << endl;
-                // cout << "y: " << this->y << endl;
-
-                // cout << this->Next_Station->get_name() << endl;
 
                 this->arrive_Station(this->Next_Station, station_list);
 
@@ -214,7 +191,6 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
     else
     {
         double d0 = distance / 2.0;
-        // cout << "d0 : " << d0 << endl;
 
         while (where > 0)
         {
@@ -222,17 +198,13 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
             if (distance - where < d0)
             {
                 // accelerate
-                // cout << "Speed : " << this->Speed << endl;
-                // cout << "x: " << this->x << endl;
-                // cout << "y: " << this->y << endl;
+
                 this->Speed = this->Speed + (acceleration * ((double)t_ref / 1000));
             }
             else
             {
                 // descelerate
-                // cout << "Speed : " << this->Speed << endl;
-                // cout << "x: " << this->x << endl;
-                // cout << "y: " << this->y << endl;
+
                 this->Speed = this->Speed - (acceleration * ((double)t_ref / 1000));
             }
             this->y += (this->Speed * ((double)t_ref / 1000)) * sin(argument);
@@ -244,10 +216,6 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
                 this->x = this->Next_Station->get_x();
                 this->y = this->Next_Station->get_y();
 
-                // cout << "Speed : " << this->Speed << endl;
-                // cout << "x: " << this->x << endl;
-                // cout << "y: " << this->y << endl;
-
                 cout << this->Next_Station->get_name() << endl;
 
                 this->arrive_Station(this->Next_Station, station_list);
@@ -257,7 +225,7 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
                 uniform_int_distribution<int> distribution_leave(0, this->Nb_pass);
 
                 int nb = distribution_leave(generator);
-                // cout << "AAAAAAAAAAAAAA : " << nb << endl;
+
                 this->leaving_pass(nb);
 
                 uniform_int_distribution<int> distribution_arrive(this->Nb_pass, this->Nb_pass_Max);

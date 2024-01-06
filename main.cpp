@@ -8,6 +8,7 @@
 #include "Station.h"
 #include "Rame.h"
 #include "function.h"
+#include "Bouton.h"
 
 using namespace std;
 
@@ -15,6 +16,7 @@ mutex mutex;
 
 int main()
 {
+
     vector<Station> L1;
     vector<Station> L2;
 
@@ -22,7 +24,6 @@ int main()
     vector<Rame> L2_rame;
 
     vector<string> Station_name_L1 = {"Départ", "Quatre Cantons - Stade Pierre-Mauroy", "Cité scientifique - Professeur Gabillard", "Triolo", "Villeneuve-d'Ascq - Hôtel de Ville", "Pont de Bois", "Square Flandres", "Mairie d'Hellemmes", "Marbrerie", "Fives", "Caulier", "Gare Lille-Flandres", "Rihour", "République - Beaux-Arts", "Gambetta", "Wazemmes", "Porte des Postes", "CHU - Centre Oscar-Lambret", "CHU - Eurasanté"};
-    // vector<vector<double>> Station_position_L1 = {{0,0}, {10000, 10000}, {1,1}, {1.5, 1.5}, {2,2}, {2.5, 2.5}, {3,3}, {3.5, 3.5}, {4,4}, {4.5, 4.5}, {5,5}, {5.5, 5.5}, {6,6}, {6.5, 6.5}, {7,7}, {7.5, 7.5}, {8,8}, {8.5, 8.5}, {9,9}};
     vector<vector<double>> Station_position_L1 = {{1745, 40}, {1342, 75}, {1106, 125}, {817, 191}, {792, 309}, {817, 396}, {757, 555}, {665, 651}, {478, 715}, {264, 715}, {155, 760}, {5.5, 5.5}, {6, 6}, {6.5, 6.5}, {7, 7}, {7.5, 7.5}, {8, 8}, {8.5, 8.5}, {9, 9}};
     vector<int> Max_Pass_L1 = {0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
 
@@ -32,9 +33,11 @@ int main()
 
     vector<double> coordonates = {1920, 1080};
 
+    Bouton urgence = Bouton((double)10, (double)10);
+
     for (int i = 0; i < 10; i++)
     {
-        L1.emplace_back(Station_name_L1[i], Station_position_L1[i][0], Station_position_L1[i][1], Max_Pass_L1[i], coordonates);
+        L1.emplace_back(Station_name_L1[i], Station_position_L1[i][0], Station_position_L1[i][1], Max_Pass_L1[i]);
     }
 
     for (int i = 0; i < L1.size(); i++)
@@ -42,14 +45,16 @@ int main()
         L1[i].calculate_distance(L1);
     }
 
-    // Créer une fenêtre SFML
-    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Déplacement carré");
+    
 
     Rame Rame1 = Rame("Départ", 1, 30, L1_rame.begin(), L1);
     Rame Rame2 = Rame("Quatre Cantons - Stade Pierre-Mauroy", 1, 30, L1_rame.begin(), L1);
 
-    thread thread1(move_rame, ref(Rame1), 16, 1.3, 8, L1);
-    thread thread2(move_rame, ref(Rame2), 16, 1.3, 9, L1);
+    // Créer une fenêtre SFML
+    sf::RenderWindow window(sf::VideoMode(1920, 1080), "Déplacement carré");
+
+    thread thread1(move_rame, ref(Rame1), 16, 1.3, 8, L1, ref(urgence));
+    thread thread2(move_rame, ref(Rame2), 16, 1.3, 9, L1, ref(urgence));
 
     while (window.isOpen())
     {
@@ -62,6 +67,11 @@ int main()
         }
 
         window.clear();
+
+        sf::CircleShape bouton_urgence;
+        bouton_urgence.setRadius(20);
+        bouton_urgence.setFillColor(sf::Color::Red);
+        // Il faut faire en sorte que quand on clique dessus on fait "urgence.change_etat();"
 
         for (auto start = L1.begin(); start != L1.end(); start++)
         {

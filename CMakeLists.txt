@@ -21,4 +21,5 @@ add_executable(SuperVAL
         Rame.cpp
         Station.cpp
         function.cpp
+        Bouton.cpp
 )

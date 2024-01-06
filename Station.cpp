@@ -8,12 +8,12 @@
 #include <SFML/Graphics.hpp>
 #include "Station.h"
 #include "function.h"
+#include "Bouton.h"
 
 using namespace std;
 
-Station::Station(string const &name, const double &x, const double &y, const int &max_pass, vector<double> map_size)
+Station::Station(string const &name, const double &x, const double &y, const int &max_pass)
 {
-    auto coordonates = mercatorProjection(x, y, map_size[0], map_size[1]);
     this->name = name;
     this->x = x;
     this->y = y;

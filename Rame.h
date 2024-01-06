@@ -32,12 +32,12 @@ public:
     void incomming_pass(const int &Nb);
     void arrive_Station(vector<Station>::iterator &station, vector<Station> &station_list);
     void leave_station(vector<Station>::iterator &station, vector<Station> &station_list);
-    int go_to_next_station(double acceleration, int t_ref, vector<Station> &station_list);
+    int go_to_next_station(double acceleration, int t_ref, vector<Station> &station_list, Bouton &urgence);
     double dist_next_rame();
     double dist_next_station();
     double get_x();
     double get_y();
-    void draw(sf::RenderWindow& window) const;
+    void draw(sf::RenderWindow &window) const;
     double get_arg(vector<Station> &station_list);
 
     // urgence si la distance avec la prochaine station est plus grande que la distance avec le prochain wagon alors on arrete à la station

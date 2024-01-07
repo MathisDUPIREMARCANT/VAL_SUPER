@@ -72,7 +72,7 @@ void Rame::incomming_pass(const int &Nb)
         {
             this->Nb_pass++;
             this->Next_Station->decrease_pass();
-            this_thread::sleep_for(chrono::milliseconds(250));
+            this_thread::sleep_for(chrono::milliseconds(500));
         }
         cout << endl;
     }

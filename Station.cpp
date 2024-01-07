@@ -96,11 +96,16 @@ void Station::calculate_distance(vector<Station> &list)
     {
         if (this->name == list[i].get_name())
         {
+            auto before = list[(i - 1) % list.size()];
             auto next = list[(i + 1) % list.size()];
             this->distance = this->distance_to(next);
             auto a = next.get_x() - this->x;
             auto b = next.get_y() - this->y;
             this->argument = atan2(b, a);
+
+            a = this->x - before.get_x();
+            b = this->y - before.get_y();
+            this->b_argument = atan2(b, a);
         }
     }
 }

@@ -121,8 +121,8 @@ int main()
                     people.setFillColor(sf::Color::Blue);
                 }
             }
-            station.setPosition(start->get_x() - 20, start->get_y() - 20);
-            station.setRotation(30);
+            station.setPosition(start->get_x(), start->get_y());
+            station.setRotation((start->get_next_arg() * 180 / 3.14) - 90);
             window.draw(station);
         }
 
@@ -141,6 +141,7 @@ int main()
         window.draw(r1);
         window.draw(r2);
         window.draw(r3);
+        window.draw(bouton_urgence);
 
         window.display();
     }

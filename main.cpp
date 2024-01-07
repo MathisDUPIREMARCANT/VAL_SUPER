@@ -101,7 +101,25 @@ int main()
         sf::CircleShape bouton_urgence;
         bouton_urgence.setRadius(20);
         bouton_urgence.setFillColor(sf::Color::Red);
-        // Il faut faire en sorte que quand on clique dessus on fait "urgence.change_etat();"
+
+        if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                // Obtiens la position du clic et compare avec la position et la taille du bouton
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                sf::Vector2f buttonPos = bouton_urgence.getPosition();
+
+                float radius = bouton_urgence.getRadius();
+                sf::Vector2f buttonSize(radius * 2, radius * 2);
+
+                // Vérifie si le clic est à l'intérieur du bouton
+                if (mousePos.x >= buttonPos.x && mousePos.x <= buttonPos.x + buttonSize.x && mousePos.y >= buttonPos.y && mousePos.y <= buttonPos.y + buttonSize.y) {
+                    // Le clic est sur le bouton, appele change_etat()
+                    urgence.change_etat();
+                    bouton_urgence.setFillColor(sf::Color::Blue);
+                }
+            }
+        }
+        
 
         for (auto start = L1.begin(); start != L1.end(); start++) {
             sf::Sprite station(stationTexture);

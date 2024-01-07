@@ -55,20 +55,20 @@ int main()
 
     //Station 
     sf::Texture stationTexture;
-    if (!stationTexture.loadFromFile("../image/station.png")) {
+    if (!stationTexture.loadFromFile("../../image/station.png")) {
         return -1; // Erreur de chargement de l'image de la station
     }
 
     // background
     sf::Texture backgroundTexture;
 
-    if (!backgroundTexture.loadFromFile("../image/image.jpg")) {
+    if (!backgroundTexture.loadFromFile("../../image/image.jpg")) {
         
     }
 
     // Charger une texture pour l'objet
     sf::Texture objectTexture;
-    if (!objectTexture.loadFromFile("../image/metro.png")) {
+    if (!objectTexture.loadFromFile("../../image/metro.png")) {
         return -2; // Erreur de chargement de l'image de l'objet
     }
 

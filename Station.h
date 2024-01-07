@@ -17,6 +17,7 @@ private:
     double y;
     double distance;
     double argument;
+    double b_argument;
     int waiting_pass; // Personne en attente
     int max_pass;
     bool occupied; // Elle est occupé ?

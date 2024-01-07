@@ -117,25 +117,28 @@ int main()
                 {
                     stateSprite.setTexture(enteringTexture);
                 }
-                stateSprite.setPosition(start->get_x(), start->get_y()); // Position ajustée
-                window.draw(stateSprite);
             }
+            station.setPosition(start->get_x(), start->get_y());
+            station.setRotation((start->get_next_arg() * 180 / 3.14) - 90);
+            window.draw(station);
         }
 
+        
         r1.setRotation(Rame1.get_arg(L1, 0));
         r1.setPosition(Rame1.get_x(), Rame1.get_y());
 
         
         r2.setRotation(Rame2.get_arg(L1, 0));
-        r2.setPosition(Rame2.get_x(), Rame2.get_y());
+        r2.setPosition(Rame2.get_x(), Rame2.get_y() + 10);
 
         
         r3.setRotation(Rame3.get_arg(L1, 0));
-        r3.setPosition(Rame3.get_x(), Rame3.get_y());
+        r3.setPosition(Rame3.get_x(), Rame3.get_y() + 10);
 
         window.draw(r1);
         window.draw(r2);
         window.draw(r3);
+        window.draw(bouton_urgence);
 
         window.display();
     }

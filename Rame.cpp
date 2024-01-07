@@ -72,7 +72,7 @@ void Rame::incomming_pass(const int &Nb)
         {
             this->Nb_pass++;
             this->Next_Station->decrease_pass();
-            this_thread::sleep_for(chrono::milliseconds(250));
+            this_thread::sleep_for(chrono::milliseconds(500));
         }
         cout << endl;
     }
@@ -117,6 +117,7 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
     double distance = Next_Station->get_next_dist();
     double argument = Next_Station->get_next_arg();
     auto degree = argument * 180 / 3.14;
+    this->arg = argument;
 
     if (this->Next_Station == prev(station_list.end()))
     {

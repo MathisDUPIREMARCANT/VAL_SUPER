@@ -99,6 +99,7 @@ void Rame::leave_station(vector<Station>::iterator &station, vector<Station> &st
 {
     if (this->Next_Station->get_occupied() == true)
     {
+        this_thread::sleep_for(chrono::milliseconds(1000));
         this->Next_Station->change_occupied(false);
     }
     else
@@ -135,7 +136,7 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
 
     while (this->Next_Station->get_occupied() == true || pressed_urgence == true)
     {
-        this_thread::sleep_for(chrono::milliseconds(300));
+        this_thread::sleep_for(chrono::milliseconds(500));
     }
 
     if (distance > (d1 * 2))

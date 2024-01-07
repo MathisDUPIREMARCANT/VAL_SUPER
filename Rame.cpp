@@ -29,7 +29,7 @@ Rame::Rame(string station, int Ligne, int Nb_pass_Max, vector<Rame>::iterator &R
     }
 
     this->Speed = 0;
-    this->Speed_max = 19.5;
+    this->Speed_max = 100;
     this->Ligne = Ligne;
     this->Nb_pass_Max = Nb_pass_Max;
     this->Nb_pass = 0;
@@ -109,14 +109,15 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
     double argument = Next_Station->get_next_arg();
     auto degree = argument * 180 / 3.14;
 
-    // if (this->Next_Station == station_list.end())
-    // {
-    //     this->Next_Station = station_list.begin();
-    // }
-    // else
-    // {
-    this->Next_Station++;
-    // }
+    cout << "Next" << this->Next_Station->get_name() << endl;
+    cout << "start" << station_list.begin()->get_name() << endl;
+    cout << "end" << prev(station_list.end())->get_name() << endl;
+
+    if (this->Next_Station->get_name() == "Depart")
+    {
+        this->Next_Station++;
+    }
+
     double where = this->dist_next_station();
     bool pressed_urgence = urgence.get_etat();
 
@@ -183,6 +184,11 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
 
                 this->Next_Station->increase_pass();
 
+                if (this->Next_Station->get_name() == "R_Lille Europe")
+                {
+                    this->Next_Station = station_list.begin();
+                }
+
                 return EXIT_SUCCESS;
             }
             this_thread::sleep_for(chrono::milliseconds(t_ref));
@@ -233,6 +239,11 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
                 this->incomming_pass(nb);
 
                 this->leave_station(this->Next_Station, station_list);
+
+                if (this->Next_Station->get_name() == "R_Lille Europe")
+                {
+                    this->Next_Station = station_list.begin();
+                }
 
                 return EXIT_SUCCESS;
             }

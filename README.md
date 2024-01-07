@@ -4,5 +4,6 @@
 Notre super version du VAL tourne à 60fps sur toutes les machines !!! 
 
 Vous trouverez ci-joint le lien de la capsule vidéo :
+https://youtu.be/y17yU2RASaM
 
 

@@ -134,6 +134,7 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
     while (this->Next_Station->get_occupied() == true || pressed_urgence == true)
     {
         this_thread::sleep_for(chrono::milliseconds(500));
+        pressed_urgence = urgence.get_etat();
     }
 
     if (distance > (d1 * 2))

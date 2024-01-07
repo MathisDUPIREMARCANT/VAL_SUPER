@@ -47,16 +47,14 @@ int main()
     Rame Rame2 = Rame("R_Rihour", 1, 30, L1_rame.begin(), ref(L1));
     Rame Rame3 = Rame("A_Rihour", 1, 30, L1_rame.begin(), ref(L1));
 
-    // Créer une fenêtre SFML
     sf::RenderWindow window(sf::VideoMode(coordonates[0], coordonates[1]), "VAL : DUPIRE-MARCANT & LAROUZIERE");
 
-    //thread thread1(move_rame, ref(Rame1), 16, ACC, 20, ref(L1), ref(urgence));
+    thread thread1(move_rame, ref(Rame1), 16, ACC, 20, ref(L1), ref(urgence));
     thread thread2(move_rame, ref(Rame2), 16, ACC, 20, ref(L1), ref(urgence));
-    //thread thread3(move_rame, ref(Rame3), 16, ACC, 20, ref(L1), ref(urgence));
+    thread thread3(move_rame, ref(Rame3), 16, ACC, 20, ref(L1), ref(urgence));
 
     while (window.isOpen())
     {
-        // Gére les événements
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -101,30 +99,30 @@ int main()
             window.draw(station);
         }
 
-        // sf::RectangleShape r1(sf::Vector2f(30.0f, 10.0f));
-        // r1.setFillColor(sf::Color::Red);
-        // r1.setRotation(Rame1.get_arg(L1, 0));
-        // r1.setPosition(Rame1.get_x(), Rame1.get_y());
+        sf::RectangleShape r1(sf::Vector2f(30.0f, 10.0f));
+        r1.setFillColor(sf::Color::Red);
+        r1.setRotation(Rame1.get_arg(L1, 0));
+        r1.setPosition(Rame1.get_x(), Rame1.get_y());
 
         sf::RectangleShape r2(sf::Vector2f(30.0f, 10.0f));
         r2.setFillColor(sf::Color::Red);
         r2.setRotation(Rame2.get_arg(L1, 0));
         r2.setPosition(Rame2.get_x(), Rame2.get_y());
 
-        // sf::RectangleShape r3(sf::Vector2f(30.0f, 10.0f));
-        // r3.setFillColor(sf::Color::Red);
-        // r3.setRotation(Rame3.get_arg(L1, 0));
-        // r3.setPosition(Rame3.get_x(), Rame3.get_y());
+        sf::RectangleShape r3(sf::Vector2f(30.0f, 10.0f));
+        r3.setFillColor(sf::Color::Red);
+        r3.setRotation(Rame3.get_arg(L1, 0));
+        r3.setPosition(Rame3.get_x(), Rame3.get_y());
 
-        //window.draw(r1);
+        window.draw(r1);
         window.draw(r2);
-        //window.draw(r3);
+        window.draw(r3);
 
         window.display();
     }
-   // thread1.join();
+    thread1.join();
     thread2.join();
-   // thread3.join();
+    thread3.join();
 
     return 0;
 }

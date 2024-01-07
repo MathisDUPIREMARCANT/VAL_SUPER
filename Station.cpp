@@ -101,7 +101,6 @@ void Station::calculate_distance(vector<Station> &list)
             auto a = next.get_x() - this->x;
             auto b = next.get_y() - this->y;
             this->argument = atan2(b, a);
-            cout << this->name << "  : module:" << this->distance << " : argument:" << this->argument << " : " << list[(i + 1) % list.size()].get_name() << endl;
         }
     }
 }

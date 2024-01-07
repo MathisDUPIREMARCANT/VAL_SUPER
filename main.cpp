@@ -64,7 +64,7 @@ int main()
     // background
     sf::Texture backgroundTexture;
 
-    if (!backgroundTexture.loadFromFile("../../image/image.jpg"))
+    if (!backgroundTexture.loadFromFile("../../image/image.png"))
     {
     }
 

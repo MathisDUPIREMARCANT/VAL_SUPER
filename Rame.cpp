@@ -29,7 +29,7 @@ Rame::Rame(string station, int Ligne, int Nb_pass_Max, vector<Rame>::iterator &R
     }
 
     this->Speed = 0;
-    this->Speed_max = 200;
+    this->Speed_max = 19.5;
     this->Ligne = Ligne;
     this->Nb_pass_Max = Nb_pass_Max;
     this->Nb_pass = 0;

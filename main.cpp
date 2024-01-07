@@ -10,7 +10,7 @@
 #include "function.h"
 #include "Bouton.h"
 
-#define ACC 50
+#define ACC 1.3
 
 using namespace std;
 

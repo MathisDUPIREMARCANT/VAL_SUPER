@@ -53,7 +53,6 @@ void Rame::leaving_pass(const int &Nb)
     for (int i = 0; i < Nb; i++)
     {
         this->Nb_pass--;
-        cout << "this-Nb_pass : " << this->Nb_pass << endl;
         this_thread::sleep_for(chrono::milliseconds(500));
     }
     this->Next_Station->change_leaving(0);
@@ -66,7 +65,6 @@ void Rame::incomming_pass(const int &Nb)
     {
         this->Nb_pass++;
         this->Next_Station->decrease_pass();
-        cout << "this-Nb_pass : " << this->Nb_pass << endl;
         this_thread::sleep_for(chrono::milliseconds(500));
     }
     this->Next_Station->change_leaving(0);
@@ -109,14 +107,19 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
     double argument = Next_Station->get_next_arg();
     auto degree = argument * 180 / 3.14;
 
-    cout << "Next" << this->Next_Station->get_name() << endl;
-    cout << "start" << station_list.begin()->get_name() << endl;
+    cout << "Next avant calcule " << this->Next_Station->get_name() << endl;
     cout << "end" << prev(station_list.end())->get_name() << endl;
 
-    if (this->Next_Station->get_name() == "Depart")
+    if (this->Next_Station == prev(station_list.end()))
     {
-        this->Next_Station++;
+        cout << "Reached the end, restarting iterator." << endl;
+        this->Next_Station = station_list.begin();
     }
+    else
+    {
+        ++this->Next_Station;
+    }
+    cout << "Next après calcule " << this->Next_Station->get_name() << endl;
 
     double where = this->dist_next_station();
     bool pressed_urgence = urgence.get_etat();
@@ -184,11 +187,6 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
 
                 this->Next_Station->increase_pass();
 
-                if (this->Next_Station->get_name() == "R_Lille Europe")
-                {
-                    this->Next_Station = station_list.begin();
-                }
-
                 return EXIT_SUCCESS;
             }
             this_thread::sleep_for(chrono::milliseconds(t_ref));
@@ -240,11 +238,6 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
 
                 this->leave_station(this->Next_Station, station_list);
 
-                if (this->Next_Station->get_name() == "R_Lille Europe")
-                {
-                    this->Next_Station = station_list.begin();
-                }
-
                 return EXIT_SUCCESS;
             }
             this_thread::sleep_for(chrono::milliseconds(t_ref));
@@ -263,38 +256,49 @@ double Rame::dist_next_station()
     return sqrt(pow(this->Next_Station->get_x() - this->x, 2) + pow(this->Next_Station->get_y() - this->y, 2));
 }
 
-void Rame::draw(sf::RenderWindow &window) const
-{
-    // Créer un carré
-    sf::RectangleShape square(sf::Vector2f(50.0f, 50.0f));
-    square.setFillColor(sf::Color::Red);
-
-    square.setPosition(this->x, this->y);
-
-    window.draw(square);
-}
-
 double Rame::get_arg(vector<Station> &station_list)
 {
     for (int i = 0; i < station_list.size(); i++)
     {
         if (station_list[i].get_name() == this->Next_Station->get_name())
         {
-            auto where = this->dist_next_station();
-            if (where < 20)
+            if (i)
             {
-                return ((where * station_list[i - 1].get_next_arg() * 180 / 3.14) + (20 - where) * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
+                auto where = this->dist_next_station();
+                if (where < 20)
+                {
+                    return ((where * station_list[i - 1].get_next_arg() * 180 / 3.14) + (20 - where) * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
+                }
+                else if (this->Next_Station->get_occupied())
+                {
+                    return ((station_list[i - 1].get_next_arg() * 180 / 3.14) + this->Next_Station->get_next_arg() * 180 / 3.14) / 2;
+                }
+                //             else if(this->dist_next_station() - where < 20){
+                // return (((20 - where) * station_list[i - 1].get_next_arg() * 180 / 3.14) + where * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
+                //             }
+                else
+                {
+                    return station_list[i - 1].get_next_arg() * 180 / 3.14;
+                }
             }
-            else if (this->Next_Station->get_occupied())
-            {
-                return ((station_list[i - 1].get_next_arg() * 180 / 3.14) + this->Next_Station->get_next_arg() * 180 / 3.14) / 2;
-            }
-            //             else if(this->dist_next_station() - where < 20){
-            // return (((20 - where) * station_list[i - 1].get_next_arg() * 180 / 3.14) + where * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
-            //             }
             else
             {
-                return station_list[i - 1].get_next_arg() * 180 / 3.14;
+                auto where = this->dist_next_station();
+                if (where < 20)
+                {
+                    return ((where * prev(station_list.end())->get_next_arg() * 180 / 3.14) + (20 - where) * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
+                }
+                else if (this->Next_Station->get_occupied())
+                {
+                    return ((prev(station_list.end())->get_next_arg() * 180 / 3.14) + this->Next_Station->get_next_arg() * 180 / 3.14) / 2;
+                }
+                //             else if(this->dist_next_station() - where < 20){
+                // return (((20 - where) * station_list[i - 1].get_next_arg() * 180 / 3.14) + where * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
+                //             }
+                else
+                {
+                    return prev(station_list.end())->get_next_arg() * 180 / 3.14;
+                }
             }
         }
     }

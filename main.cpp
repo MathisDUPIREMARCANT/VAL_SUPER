@@ -50,7 +50,7 @@ int main()
     // Créer une fenêtre SFML
     sf::RenderWindow window(sf::VideoMode(coordonates[0], coordonates[1]), "VAL : DUPIRE-MARCANT & LAROUZIERE");
 
-    thread thread1(move_rame, ref(Rame1), 16, 50, 8, ref(L1), ref(urgence));
+    //thread thread1(move_rame, ref(Rame1), 16, 50, 8, ref(L1), ref(urgence));
     thread thread2(move_rame, ref(Rame2), 16, 50, 9, ref(L1), ref(urgence));
 
     while (window.isOpen())
@@ -100,22 +100,22 @@ int main()
             window.draw(station);
         }
 
-        sf::RectangleShape r1(sf::Vector2f(30.0f, 10.0f));
-        r1.setFillColor(sf::Color::Red);
-        r1.setRotation(Rame1.get_arg(L1));
-        r1.setPosition(Rame1.get_x() + 15, Rame1.get_y() + 5);
+        // sf::RectangleShape r1(sf::Vector2f(30.0f, 10.0f));
+        // r1.setFillColor(sf::Color::Red);
+        // r1.setRotation(Rame1.get_arg(L1));
+        // r1.setPosition(Rame1.get_x() + 15, Rame1.get_y() + 5);
 
         sf::RectangleShape r2(sf::Vector2f(30.0f, 10.0f));
         r2.setFillColor(sf::Color::Red);
         r2.setRotation(Rame2.get_arg(L1));
         r2.setPosition(Rame2.get_x() + 15, Rame2.get_y() + 5);
 
-        window.draw(r1);
+        // window.draw(r1);
         window.draw(r2);
 
         window.display();
     }
-    thread1.join();
+    // thread1.join();
     thread2.join();
 
     return 0;

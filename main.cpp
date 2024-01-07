@@ -86,6 +86,9 @@ int main()
     sf::Sprite r2(objectTexture);
     sf::Sprite r3(objectTexture);
 
+    // Définissions d'une variable  pour stocker le dernier temps de clic
+    auto lastClickTime = std::chrono::steady_clock::now();  
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -116,6 +119,8 @@ int main()
                     // Le clic est sur le bouton, appele change_etat()
                     urgence.change_etat();
                     bouton_urgence.setFillColor(sf::Color::Blue);
+                    // Attendre un certain temps (par exemple, 500 millisecondes)
+                    sf::sleep(sf::milliseconds(1000));
                 }
             }
         }

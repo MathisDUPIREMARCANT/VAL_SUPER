@@ -29,7 +29,7 @@ Rame::Rame(string station, int Ligne, int Nb_pass_Max, vector<Rame>::iterator &R
     }
 
     this->Speed = 0;
-    this->Speed_max = 100;
+    this->Speed_max = 19.5;
     this->Ligne = Ligne;
     this->Nb_pass_Max = Nb_pass_Max;
     this->Nb_pass = 0;
@@ -256,8 +256,9 @@ double Rame::dist_next_station()
     return sqrt(pow(this->Next_Station->get_x() - this->x, 2) + pow(this->Next_Station->get_y() - this->y, 2));
 }
 
-double Rame::get_arg(vector<Station> &station_list)
+double Rame::get_arg(vector<Station> &station_list, int a)
 {
+
     for (int i = 0; i < station_list.size(); i++)
     {
         if (station_list[i].get_name() == this->Next_Station->get_name())
@@ -267,18 +268,39 @@ double Rame::get_arg(vector<Station> &station_list)
                 auto where = this->dist_next_station();
                 if (where < 20)
                 {
-                    return ((where * station_list[i - 1].get_next_arg() * 180 / 3.14) + (20 - where) * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
+                    if (a == 0)
+                    {
+                        return ((where * station_list[i - 1].get_next_arg() * 180 / 3.14) + (20 - where) * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
+                    }
+                    else
+                    {
+                        return station_list[i - 1].get_next_arg() * 180 / 3.14;
+                    }
                 }
                 else if (this->Next_Station->get_occupied())
                 {
-                    return ((station_list[i - 1].get_next_arg() * 180 / 3.14) + this->Next_Station->get_next_arg() * 180 / 3.14) / 2;
+                    if (a == 0)
+                    {
+                        return ((station_list[i - 1].get_next_arg() * 180 / 3.14) + this->Next_Station->get_next_arg() * 180 / 3.14) / 2;
+                    }
+                    else
+                    {
+                        return station_list[i - 1].get_next_arg() * 180 / 3.14;
+                    }
                 }
                 //             else if(this->dist_next_station() - where < 20){
                 // return (((20 - where) * station_list[i - 1].get_next_arg() * 180 / 3.14) + where * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
                 //             }
                 else
                 {
-                    return station_list[i - 1].get_next_arg() * 180 / 3.14;
+                    if (a == 0)
+                    {
+                        return station_list[i - 1].get_next_arg() * 180 / 3.14;
+                    }
+                    else
+                    {
+                        return station_list[i - 1].get_next_arg() * 180 / 3.14;
+                    }
                 }
             }
             else
@@ -286,18 +308,33 @@ double Rame::get_arg(vector<Station> &station_list)
                 auto where = this->dist_next_station();
                 if (where < 20)
                 {
-                    return ((where * prev(station_list.end())->get_next_arg() * 180 / 3.14) + (20 - where) * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
+                    if (a == 0)
+                    {
+                        return ((where * prev(station_list.end())->get_next_arg() * 180 / 3.14) + (20 - where) * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
+                    }
+                    else{
+                        prev(station_list.end())->get_next_arg() * 180 / 3.14;
+                    }
                 }
                 else if (this->Next_Station->get_occupied())
                 {
-                    return ((prev(station_list.end())->get_next_arg() * 180 / 3.14) + this->Next_Station->get_next_arg() * 180 / 3.14) / 2;
+                    if (a == 0)
+                    {
+                        return ((prev(station_list.end())->get_next_arg() * 180 / 3.14) + this->Next_Station->get_next_arg() * 180 / 3.14) / 2;
+                    }
+                    else{
+                        prev(station_list.end())->get_next_arg() * 180 / 3.14;
+                    }
                 }
-                //             else if(this->dist_next_station() - where < 20){
-                // return (((20 - where) * station_list[i - 1].get_next_arg() * 180 / 3.14) + where * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
-                //             }
                 else
                 {
-                    return prev(station_list.end())->get_next_arg() * 180 / 3.14;
+                    if (a == 0)
+                    {
+                        return prev(station_list.end())->get_next_arg() * 180 / 3.14;
+                    }
+                    else{
+                        prev(station_list.end())->get_next_arg() * 180 / 3.14;
+                    }
                 }
             }
         }

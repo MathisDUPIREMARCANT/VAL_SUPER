@@ -184,7 +184,7 @@ int main()
         window.draw(r1);
         window.draw(r2);
         window.draw(r3);
-        winndow.draw(r4);
+        window.draw(r4);
         window.draw(bouton_urgence);
 
         window.display();

@@ -105,7 +105,9 @@ int main()
 
         for (auto start = L1.begin(); start != L1.end(); start++) {
             sf::Sprite station(stationTexture);
-            station.setPosition(start->get_x() - 20, start->get_y() - 20);
+            station.setPosition(start->get_x(), start->get_y());
+            station.setRotation((start->get_next_arg() * 180 / 3.14) - 90);
+
             window.draw(station);
 
             if (start->get_occupied() == true) {
@@ -117,10 +119,10 @@ int main()
                 {
                     stateSprite.setTexture(enteringTexture);
                 }
+                stateSprite.setPosition(start->get_x(), start->get_y());
+                window.draw(stateSprite);
             }
-            station.setPosition(start->get_x(), start->get_y());
-            station.setRotation((start->get_next_arg() * 180 / 3.14) - 90);
-            window.draw(station);
+            
         }
 
         

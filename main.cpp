@@ -92,6 +92,8 @@ int main()
     auto lastClickTime = std::chrono::steady_clock::now();
     sf::Time timeThreshold = sf::seconds(1.0f);
 
+    sf::Color couleur_urgence = sf::Color::Blue;
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -106,7 +108,7 @@ int main()
 
         sf::CircleShape bouton_urgence;
         bouton_urgence.setRadius(20);
-        bouton_urgence.setFillColor(sf::Color::Red);
+        bouton_urgence.setFillColor(couleur_urgence);
 
         auto currentTime = std::chrono::steady_clock::now();
         sf::Time elapsedTime = sf::milliseconds(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastClickTime).count());
@@ -127,7 +129,13 @@ int main()
                 {
                     // Le clic est sur le bouton, appele change_etat()
                     urgence.change_etat();
-                    bouton_urgence.setFillColor(sf::Color::Blue);
+                    if(urgence.get_etat() == true){
+                        couleur_urgence = sf::Color::Red;
+                    }
+                    else{
+                        couleur_urgence = sf::Color::Blue;
+                    }
+                    
                     lastClickTime = std::chrono::steady_clock::now();
                 }
             }

@@ -18,6 +18,7 @@ private:
     double y;         // en m
     double Speed;     // en m/s
     double Speed_max; // en m/s
+    double arg;
     int Id;           // Pas besoin relier par reference a l'autre rame
     int Ligne;
     int Nb_pass_Max;

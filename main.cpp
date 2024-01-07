@@ -132,11 +132,11 @@ int main()
 
         
         r2.setRotation(Rame2.get_arg(L1, 0));
-        r2.setPosition(Rame2.get_x(), Rame2.get_y());
+        r2.setPosition(Rame2.get_x(), Rame2.get_y() + 10);
 
         
         r3.setRotation(Rame3.get_arg(L1, 0));
-        r3.setPosition(Rame3.get_x(), Rame3.get_y());
+        r3.setPosition(Rame3.get_x(), Rame3.get_y() + 10);
 
         window.draw(r1);
         window.draw(r2);

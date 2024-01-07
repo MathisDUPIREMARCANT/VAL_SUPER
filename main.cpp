@@ -5,6 +5,7 @@
 #include <thread>
 #include <mutex>
 #include <SFML/Graphics.hpp>
+#include <SFML/System/Clock.hpp>
 #include "Station.h"
 #include "Rame.h"
 #include "function.h"
@@ -18,7 +19,6 @@ mutex mutex;
 
 int main()
 {
-
     vector<Station> L1;
     vector<Station> L2;
 
@@ -53,28 +53,30 @@ int main()
     thread thread2(move_rame, ref(Rame2), 16, ACC, 20, ref(L1), ref(urgence));
     thread thread3(move_rame, ref(Rame3), 16, ACC, 20, ref(L1), ref(urgence));
 
-    // station 
+    // station
     sf::Texture stationTexture;
-    if (!stationTexture.loadFromFile("../../image/station.png")) {
+    if (!stationTexture.loadFromFile("../../image/station.png"))
+    {
         return -1; // Erreur de chargement de l'image de la station
     }
 
     // background
     sf::Texture backgroundTexture;
 
-    if (!backgroundTexture.loadFromFile("../../image/image.jpg")) {
-        
+    if (!backgroundTexture.loadFromFile("../../image/image.jpg"))
+    {
     }
 
     sf::Texture enteringTexture, exitingTexture;
-    
+
     // Charger les images personne
     enteringTexture.loadFromFile("../../image/entering.png");
     exitingTexture.loadFromFile("../../image/exiting.png");
 
     // Charger une texture pour l'objet
     sf::Texture objectTexture;
-    if (!objectTexture.loadFromFile("../../image/metro.png")) {
+    if (!objectTexture.loadFromFile("../../image/metro.png"))
+    {
         return -2; // Erreur de chargement de l'image de l'objet
     }
 
@@ -87,7 +89,8 @@ int main()
     sf::Sprite r3(objectTexture);
 
     // Définissions d'une variable  pour stocker le dernier temps de clic
-    auto lastClickTime = std::chrono::steady_clock::now();  
+    auto lastClickTime = std::chrono::steady_clock::now();
+    sf::Time timeThreshold = sf::seconds(1.0f);
 
     while (window.isOpen())
     {
@@ -105,8 +108,13 @@ int main()
         bouton_urgence.setRadius(20);
         bouton_urgence.setFillColor(sf::Color::Red);
 
-        if (event.type == sf::Event::MouseButtonPressed) {
-            if (event.mouseButton.button == sf::Mouse::Left) {
+        auto currentTime = std::chrono::steady_clock::now();
+        sf::Time elapsedTime = sf::milliseconds(std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastClickTime).count());
+
+        if (event.type == sf::Event::MouseButtonPressed && elapsedTime >= timeThreshold)
+        {
+            if (event.mouseButton.button == sf::Mouse::Left)
+            {
                 // Obtiens la position du clic et compare avec la position et la taille du bouton
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
                 sf::Vector2f buttonPos = bouton_urgence.getPosition();
@@ -115,48 +123,46 @@ int main()
                 sf::Vector2f buttonSize(radius * 2, radius * 2);
 
                 // Vérifie si le clic est à l'intérieur du bouton
-                if (mousePos.x >= buttonPos.x && mousePos.x <= buttonPos.x + buttonSize.x && mousePos.y >= buttonPos.y && mousePos.y <= buttonPos.y + buttonSize.y) {
+                if (mousePos.x >= buttonPos.x && mousePos.x <= buttonPos.x + buttonSize.x && mousePos.y >= buttonPos.y && mousePos.y <= buttonPos.y + buttonSize.y)
+                {
                     // Le clic est sur le bouton, appele change_etat()
                     urgence.change_etat();
                     bouton_urgence.setFillColor(sf::Color::Blue);
-                    // Attendre un certain temps (par exemple, 500 millisecondes)
-                    sf::sleep(sf::milliseconds(1000));
+                    lastClickTime = std::chrono::steady_clock::now();
                 }
             }
         }
-        
 
-        for (auto start = L1.begin(); start != L1.end(); start++) {
+        for (auto start = L1.begin(); start != L1.end(); start++)
+        {
             sf::Sprite station(stationTexture);
             station.setPosition(start->get_x(), start->get_y());
             station.setRotation((start->get_next_arg() * 180 / 3.14) - 90);
 
             window.draw(station);
 
-            if (start->get_occupied() == true) {
+            if (start->get_occupied() == true)
+            {
                 sf::Sprite stateSprite;
-                if (start->get_leaving() == 1) 
+                if (start->get_leaving() == 1)
                 {
                     stateSprite.setTexture(exitingTexture);
-                } else if (start->get_leaving() == 2) 
+                }
+                else if (start->get_leaving() == 2)
                 {
                     stateSprite.setTexture(enteringTexture);
                 }
                 stateSprite.setPosition(start->get_x(), start->get_y());
                 window.draw(stateSprite);
             }
-            
         }
 
-        
         r1.setRotation(Rame1.get_arg(L1, 0));
         r1.setPosition(Rame1.get_x(), Rame1.get_y());
 
-        
         r2.setRotation(Rame2.get_arg(L1, 0));
         r2.setPosition(Rame2.get_x(), Rame2.get_y() + 10);
 
-        
         r3.setRotation(Rame3.get_arg(L1, 0));
         r3.setPosition(Rame3.get_x(), Rame3.get_y() + 10);
 

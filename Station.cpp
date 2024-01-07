@@ -113,19 +113,24 @@ void Station::decrease_pass()
 
 void Station::increase_pass()
 {
-    random_device rd;
-    mt19937 generator(rd());
-    uniform_int_distribution<int> distribution_leave(this->waiting_pass, this->max_pass);
+    if (this->max_pass != 0)
+    {
+        random_device rd;
+        mt19937 generator(rd());
+        uniform_int_distribution<int> distribution_leave(this->waiting_pass, this->max_pass);
 
-    int nb = distribution_leave(generator);
+        int nb = distribution_leave(generator);
 
-    this->waiting_pass += nb;
+        this->waiting_pass += nb;
+    }
 }
 
-void Station::change_leaving(int etat){
+void Station::change_leaving(int etat)
+{
     this->leaving = etat;
 }
 
-int Station::get_leaving(){
+int Station::get_leaving()
+{
     return this->leaving;
 }

@@ -29,7 +29,7 @@ Rame::Rame(string station, int Ligne, int Nb_pass_Max, vector<Rame>::iterator &R
     }
 
     this->Speed = 0;
-    this->Speed_max = 19.5;
+    this->Speed_max = 200;
     this->Ligne = Ligne;
     this->Nb_pass_Max = Nb_pass_Max;
     this->Nb_pass = 0;
@@ -49,25 +49,31 @@ double Rame::get_y()
 
 void Rame::leaving_pass(const int &Nb)
 {
-    this->Next_Station->change_leaving(1);
-    for (int i = 0; i < Nb; i++)
+    if (Nb != 0)
     {
-        this->Nb_pass--;
-        this_thread::sleep_for(chrono::milliseconds(500));
+        this->Next_Station->change_leaving(1);
+        for (int i = 0; i < Nb; i++)
+        {
+            this->Nb_pass--;
+            this_thread::sleep_for(chrono::milliseconds(500));
+        }
+        this->Next_Station->change_leaving(0);
     }
-    this->Next_Station->change_leaving(0);
     this_thread::sleep_for(chrono::milliseconds(500));
 }
 void Rame::incomming_pass(const int &Nb)
 {
-    this->Next_Station->change_leaving(2);
-    for (int i = Nb; i > 0; i--)
+    if (Nb != 0)
     {
-        this->Nb_pass++;
-        this->Next_Station->decrease_pass();
-        this_thread::sleep_for(chrono::milliseconds(500));
+        this->Next_Station->change_leaving(2);
+        for (int i = Nb; i > 0; i--)
+        {
+            this->Nb_pass++;
+            this->Next_Station->decrease_pass();
+            this_thread::sleep_for(chrono::milliseconds(500));
+        }
+        this->Next_Station->change_leaving(0);
     }
-    this->Next_Station->change_leaving(0);
     this_thread::sleep_for(chrono::milliseconds(500));
 }
 void Rame::arrive_Station(vector<Station>::iterator &station, vector<Station> &station_list)
@@ -172,16 +178,30 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
 
                 this->arrive_Station(this->Next_Station, station_list);
 
-                random_device rd;
-                mt19937 generator(rd());
-                uniform_int_distribution<int> distribution_leave(0, this->Nb_pass);
+                int nb = 0;
 
-                int nb = distribution_leave(generator);
+                if (this->Next_Station->get_max() == 0)
+                {
+                    nb = this->Nb_pass;
+                }
+                else
+                {
+                    random_device rd;
+                    mt19937 generator(rd());
+                    uniform_int_distribution<int> distribution_leave(0, this->Nb_pass);
+
+                    int nb = distribution_leave(generator);
+                }
                 this->leaving_pass(nb);
 
-                uniform_int_distribution<int> distribution_arrive(this->Nb_pass, this->Nb_pass_Max);
-                nb = distribution_arrive(generator);
-                this->incomming_pass(min(nb, this->Next_Station->get_max()));
+                if (this->Next_Station->get_max() > 0)
+                {
+                    random_device rd;
+                    mt19937 generator(rd());
+                    uniform_int_distribution<int> distribution_arrive(this->Nb_pass, this->Nb_pass_Max);
+                    nb = distribution_arrive(generator);
+                    this->incomming_pass(min(nb, this->Next_Station->get_max()));
+                }
 
                 this->leave_station(this->Next_Station, station_list);
 
@@ -223,18 +243,30 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
                 cout << this->Next_Station->get_name() << endl;
 
                 this->arrive_Station(this->Next_Station, station_list);
+                int nb = 0;
 
-                random_device rd;
-                mt19937 generator(rd());
-                uniform_int_distribution<int> distribution_leave(0, this->Nb_pass);
+                if (this->Next_Station->get_max() == 0)
+                {
+                    nb = this->Nb_pass;
+                }
+                else
+                {
+                    random_device rd;
+                    mt19937 generator(rd());
+                    uniform_int_distribution<int> distribution_leave(0, this->Nb_pass);
 
-                int nb = distribution_leave(generator);
-
+                    int nb = distribution_leave(generator);
+                }
                 this->leaving_pass(nb);
 
-                uniform_int_distribution<int> distribution_arrive(this->Nb_pass, this->Nb_pass_Max);
-                nb = distribution_arrive(generator);
-                this->incomming_pass(nb);
+                if (this->Next_Station->get_max() > 0)
+                {
+                    random_device rd;
+                    mt19937 generator(rd());
+                    uniform_int_distribution<int> distribution_arrive(this->Nb_pass, this->Nb_pass_Max);
+                    nb = distribution_arrive(generator);
+                    this->incomming_pass(min(nb, this->Next_Station->get_max()));
+                }
 
                 this->leave_station(this->Next_Station, station_list);
 
@@ -312,7 +344,8 @@ double Rame::get_arg(vector<Station> &station_list, int a)
                     {
                         return ((where * prev(station_list.end())->get_next_arg() * 180 / 3.14) + (20 - where) * this->Next_Station->get_next_arg() * 180 / 3.14) / 20;
                     }
-                    else{
+                    else
+                    {
                         prev(station_list.end())->get_next_arg() * 180 / 3.14;
                     }
                 }
@@ -322,7 +355,8 @@ double Rame::get_arg(vector<Station> &station_list, int a)
                     {
                         return ((prev(station_list.end())->get_next_arg() * 180 / 3.14) + this->Next_Station->get_next_arg() * 180 / 3.14) / 2;
                     }
-                    else{
+                    else
+                    {
                         prev(station_list.end())->get_next_arg() * 180 / 3.14;
                     }
                 }
@@ -332,7 +366,8 @@ double Rame::get_arg(vector<Station> &station_list, int a)
                     {
                         return prev(station_list.end())->get_next_arg() * 180 / 3.14;
                     }
-                    else{
+                    else
+                    {
                         prev(station_list.end())->get_next_arg() * 180 / 3.14;
                     }
                 }

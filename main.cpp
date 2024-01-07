@@ -46,12 +46,13 @@ int main()
     Rame Rame1 = Rame("Depart", 1, 30, L1_rame.begin(), ref(L1));
     Rame Rame2 = Rame("R_Rihour", 1, 30, L1_rame.begin(), ref(L1));
     Rame Rame3 = Rame("A_Rihour", 1, 30, L1_rame.begin(), ref(L1));
-
+    Rame Rame4 = Rame("R_Republique", 1, 30, L1_rame.begin(), ref(L1));
     sf::RenderWindow window(sf::VideoMode(coordonates[0], coordonates[1]), "VAL : DUPIRE-MARCANT & LAROUZIERE");
 
     thread thread1(move_rame, ref(Rame1), 16, ACC, 20, ref(L1), ref(urgence));
     thread thread2(move_rame, ref(Rame2), 16, ACC, 20, ref(L1), ref(urgence));
     thread thread3(move_rame, ref(Rame3), 16, ACC, 20, ref(L1), ref(urgence));
+    thread thread4(move_rame, ref(Rame4), 16, ACC, 20, ref(L1), ref(urgence));
 
     // station
     sf::Texture stationTexture;
@@ -87,6 +88,7 @@ int main()
     sf::Sprite r1(objectTexture);
     sf::Sprite r2(objectTexture);
     sf::Sprite r3(objectTexture);
+    sf::Sprite r4(objectTexture);
 
     // Définissions d'une variable  pour stocker le dernier temps de clic
     auto lastClickTime = std::chrono::steady_clock::now();
@@ -129,13 +131,15 @@ int main()
                 {
                     // Le clic est sur le bouton, appele change_etat()
                     urgence.change_etat();
-                    if(urgence.get_etat() == true){
+                    if (urgence.get_etat() == true)
+                    {
                         couleur_urgence = sf::Color::Red;
                     }
-                    else{
+                    else
+                    {
                         couleur_urgence = sf::Color::Blue;
                     }
-                    
+
                     lastClickTime = std::chrono::steady_clock::now();
                 }
             }
@@ -173,10 +177,14 @@ int main()
 
         r3.setRotation(Rame3.get_arg(L1, 0));
         r3.setPosition(Rame3.get_x(), Rame3.get_y() + 10);
+        
+        r4.setRotation(Rame4.get_arg(L1, 0));
+        r4.setPosition(Rame4.get_x(), Rame4.get_y() + 10);
 
         window.draw(r1);
         window.draw(r2);
         window.draw(r3);
+        winndow.draw(r4);
         window.draw(bouton_urgence);
 
         window.display();
@@ -184,6 +192,7 @@ int main()
     thread1.join();
     thread2.join();
     thread3.join();
+    thread4.join();
 
     return 0;
 }

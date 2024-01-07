@@ -177,35 +177,31 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
                 this->y = this->Next_Station->get_y();
 
                 this->arrive_Station(this->Next_Station, station_list);
-
                 int nb = 0;
-
-                if (this->Next_Station->get_max() == 0)
+                random_device rd;
+                mt19937 generator(rd());
+                if (Nb_pass > 0)
                 {
-                    nb = this->Nb_pass;
-                }
-                else
-                {
-                    random_device rd;
-                    mt19937 generator(rd());
                     uniform_int_distribution<int> distribution_leave(0, this->Nb_pass);
+                    nb = distribution_leave(generator);
 
-                    int nb = distribution_leave(generator);
+                    this->leaving_pass(nb);
                 }
-                this->leaving_pass(nb);
+                else{
+                    nb = this->Nb_pass;
+                    this->leaving_pass(nb);
+                }
 
                 if (this->Next_Station->get_max() > 0)
                 {
-                    random_device rd;
-                    mt19937 generator(rd());
                     uniform_int_distribution<int> distribution_arrive(this->Nb_pass, this->Nb_pass_Max);
                     nb = distribution_arrive(generator);
                     this->incomming_pass(min(nb, this->Next_Station->get_max()));
-                }
+                    this->Next_Station->increase_pass();
+                }               
 
                 this->leave_station(this->Next_Station, station_list);
 
-                this->Next_Station->increase_pass();
 
                 return EXIT_SUCCESS;
             }
@@ -244,29 +240,27 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
 
                 this->arrive_Station(this->Next_Station, station_list);
                 int nb = 0;
-
-                if (this->Next_Station->get_max() == 0)
+                random_device rd;
+                mt19937 generator(rd());
+                if (Nb_pass > 0)
                 {
-                    nb = this->Nb_pass;
-                }
-                else
-                {
-                    random_device rd;
-                    mt19937 generator(rd());
                     uniform_int_distribution<int> distribution_leave(0, this->Nb_pass);
+                    nb = distribution_leave(generator);
 
-                    int nb = distribution_leave(generator);
+                    this->leaving_pass(nb);
                 }
-                this->leaving_pass(nb);
+                else{
+                    nb = this->Nb_pass;
+                    this->leaving_pass(nb);
+                }
 
                 if (this->Next_Station->get_max() > 0)
                 {
-                    random_device rd;
-                    mt19937 generator(rd());
                     uniform_int_distribution<int> distribution_arrive(this->Nb_pass, this->Nb_pass_Max);
                     nb = distribution_arrive(generator);
                     this->incomming_pass(min(nb, this->Next_Station->get_max()));
-                }
+                    this->Next_Station->increase_pass();
+                }               
 
                 this->leave_station(this->Next_Station, station_list);
 

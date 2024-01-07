@@ -18,7 +18,7 @@ Station::Station(string const &name, const double &x, const double &y, const int
     this->x = x;
     this->y = y;
     this->waiting_pass = 0;
-    this->max_pass = 100;
+    this->max_pass = max_pass;
     this->occupied = false;
     this->distance = 0;
     this->argument = 0;

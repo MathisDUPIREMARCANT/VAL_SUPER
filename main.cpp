@@ -53,7 +53,7 @@ int main()
     thread thread2(move_rame, ref(Rame2), 16, ACC, 20, ref(L1), ref(urgence));
     thread thread3(move_rame, ref(Rame3), 16, ACC, 20, ref(L1), ref(urgence));
 
-    //Station 
+    // station 
     sf::Texture stationTexture;
     if (!stationTexture.loadFromFile("../../image/station.png")) {
         return -1; // Erreur de chargement de l'image de la station
@@ -65,6 +65,12 @@ int main()
     if (!backgroundTexture.loadFromFile("../../image/image.jpg")) {
         
     }
+
+    sf::Texture enteringTexture, exitingTexture;
+    
+    // Charger les images personne
+    enteringTexture.loadFromFile("../../image/entering.png");
+    exitingTexture.loadFromFile("../../image/exiting.png");
 
     // Charger une texture pour l'objet
     sf::Texture objectTexture;
@@ -97,36 +103,25 @@ int main()
         bouton_urgence.setFillColor(sf::Color::Red);
         // Il faut faire en sorte que quand on clique dessus on fait "urgence.change_etat();"
 
-        for (auto start = L1.begin(); start != L1.end(); start++)
-        {
-            sf::CircleShape people;
+        for (auto start = L1.begin(); start != L1.end(); start++) {
             sf::Sprite station(stationTexture);
-            if (start->get_occupied() == true)
-            {
-                if (start->get_leaving() == 1)
-                {
-                    people.setFillColor(sf::Color::Yellow);
-                    window.draw(people);
-                    // 2 personnes sortent du train par secondes
-                }
-                else if (start->get_leaving() == 2)
-                {
-                    people.setFillColor(sf::Color::White);
-                    window.draw(people);
-                    // 2 personnes entrent dans le train par secondes
-                }
-                else
-                {
-                    window.draw(people);
-                    people.setFillColor(sf::Color::Blue);
-                }
-            }
             station.setPosition(start->get_x() - 20, start->get_y() - 20);
-            station.setRotation(30);
             window.draw(station);
+
+            if (start->get_occupied() == true) {
+                sf::Sprite stateSprite;
+                if (start->get_leaving() == 1) 
+                {
+                    stateSprite.setTexture(exitingTexture);
+                } else if (start->get_leaving() == 2) 
+                {
+                    stateSprite.setTexture(enteringTexture);
+                }
+                stateSprite.setPosition(start->get_x(), start->get_y()); // Position ajustée
+                window.draw(stateSprite);
+            }
         }
 
-        
         r1.setRotation(Rame1.get_arg(L1, 0));
         r1.setPosition(Rame1.get_x(), Rame1.get_y());
 

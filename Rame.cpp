@@ -49,31 +49,39 @@ double Rame::get_y()
 
 void Rame::leaving_pass(const int &Nb)
 {
-    if (Nb != 0)
+    if (Nb > 0)
     {
+        cout << "Nb pass : ";
         this->Next_Station->change_leaving(1);
         for (int i = 0; i < Nb; i++)
         {
+            cout << this->Nb_pass << " / ";
             this->Nb_pass--;
             this_thread::sleep_for(chrono::milliseconds(500));
         }
-        this->Next_Station->change_leaving(0);
+        cout << endl;
     }
-    this_thread::sleep_for(chrono::milliseconds(500));
+    this->Next_Station->change_leaving(0);
+
+    this_thread::sleep_for(chrono::milliseconds(250));
 }
 void Rame::incomming_pass(const int &Nb)
 {
-    if (Nb != 0)
+    if (Nb > 0)
     {
+        cout << "Nb pass : ";
         this->Next_Station->change_leaving(2);
         for (int i = Nb; i > 0; i--)
         {
+            cout << this->Nb_pass << " / ";
             this->Nb_pass++;
             this->Next_Station->decrease_pass();
-            this_thread::sleep_for(chrono::milliseconds(500));
+            this_thread::sleep_for(chrono::milliseconds(250));
         }
-        this->Next_Station->change_leaving(0);
+        cout << endl;
     }
+    this->Next_Station->change_leaving(0);
+
     this_thread::sleep_for(chrono::milliseconds(500));
 }
 void Rame::arrive_Station(vector<Station>::iterator &station, vector<Station> &station_list)
@@ -113,19 +121,14 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
     double argument = Next_Station->get_next_arg();
     auto degree = argument * 180 / 3.14;
 
-    cout << "Next avant calcule " << this->Next_Station->get_name() << endl;
-    cout << "end" << prev(station_list.end())->get_name() << endl;
-
     if (this->Next_Station == prev(station_list.end()))
     {
-        cout << "Reached the end, restarting iterator." << endl;
         this->Next_Station = station_list.begin();
     }
     else
     {
         ++this->Next_Station;
     }
-    cout << "Next après calcule " << this->Next_Station->get_name() << endl;
 
     double where = this->dist_next_station();
     bool pressed_urgence = urgence.get_etat();
@@ -176,18 +179,26 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
                 this->x = this->Next_Station->get_x();
                 this->y = this->Next_Station->get_y();
 
+                cout << "Next Station : " << this->Next_Station->get_name() << endl;
+                cout << "Nb pass : " << this->Nb_pass << endl;
+
                 this->arrive_Station(this->Next_Station, station_list);
                 int nb = 0;
                 random_device rd;
                 mt19937 generator(rd());
-                if (Nb_pass > 0)
+                if (Nb_pass > 0 && this->Next_Station->get_max() > 0)
                 {
+                    cout << "On a des passagers" << endl;
                     uniform_int_distribution<int> distribution_leave(0, this->Nb_pass);
                     nb = distribution_leave(generator);
 
+                    cout << "On en fait partir : " << nb << endl;
+
                     this->leaving_pass(nb);
                 }
-                else{
+                else if (Nb_pass > 0)
+                {
+                    cout << "On en fait partir : " << nb << endl;
                     nb = this->Nb_pass;
                     this->leaving_pass(nb);
                 }
@@ -196,12 +207,12 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
                 {
                     uniform_int_distribution<int> distribution_arrive(this->Nb_pass, this->Nb_pass_Max);
                     nb = distribution_arrive(generator);
+                    cout << "On en fait entrer : " << nb << endl;
                     this->incomming_pass(min(nb, this->Next_Station->get_max()));
                     this->Next_Station->increase_pass();
-                }               
+                }
 
                 this->leave_station(this->Next_Station, station_list);
-
 
                 return EXIT_SUCCESS;
             }
@@ -236,20 +247,26 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
                 this->x = this->Next_Station->get_x();
                 this->y = this->Next_Station->get_y();
 
-                cout << this->Next_Station->get_name() << endl;
+                cout << "Next Station : " << this->Next_Station->get_name() << endl;
+                cout << "Nb pass : " << this->Nb_pass << endl;
 
                 this->arrive_Station(this->Next_Station, station_list);
                 int nb = 0;
                 random_device rd;
                 mt19937 generator(rd());
-                if (Nb_pass > 0)
+                if (Nb_pass > 0 && this->Next_Station->get_max() > 0)
                 {
+                    cout << "On a des passagers" << endl;
                     uniform_int_distribution<int> distribution_leave(0, this->Nb_pass);
                     nb = distribution_leave(generator);
 
+                    cout << "On en fait partir : " << nb << endl;
+
                     this->leaving_pass(nb);
                 }
-                else{
+                else if (Nb_pass > 0)
+                {
+                    cout << "On en fait partir : " << nb << endl;
                     nb = this->Nb_pass;
                     this->leaving_pass(nb);
                 }
@@ -258,10 +275,10 @@ int Rame::go_to_next_station(double acceleration, int t_ref, vector<Station> &st
                 {
                     uniform_int_distribution<int> distribution_arrive(this->Nb_pass, this->Nb_pass_Max);
                     nb = distribution_arrive(generator);
+                    cout << "On en fait entrer : " << nb << endl;
                     this->incomming_pass(min(nb, this->Next_Station->get_max()));
                     this->Next_Station->increase_pass();
-                }               
-
+                }
                 this->leave_station(this->Next_Station, station_list);
 
                 return EXIT_SUCCESS;

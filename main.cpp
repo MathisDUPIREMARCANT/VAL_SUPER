@@ -53,6 +53,33 @@ int main()
     thread thread2(move_rame, ref(Rame2), 16, ACC, 20, ref(L1), ref(urgence));
     thread thread3(move_rame, ref(Rame3), 16, ACC, 20, ref(L1), ref(urgence));
 
+    //Station 
+    sf::Texture stationTexture;
+    if (!stationTexture.loadFromFile("../image/station.png")) {
+        return -1; // Erreur de chargement de l'image de la station
+    }
+
+    // background
+    sf::Texture backgroundTexture;
+
+    if (!backgroundTexture.loadFromFile("../image/image.jpg")) {
+        
+    }
+
+    // Charger une texture pour l'objet
+    sf::Texture objectTexture;
+    if (!objectTexture.loadFromFile("../image/metro.png")) {
+        return -2; // Erreur de chargement de l'image de l'objet
+    }
+
+    // Créer un sprite pour l'arrière-plan
+    sf::Sprite background;
+    background.setTexture(backgroundTexture);
+
+    sf::Sprite r1(objectTexture);
+    sf::Sprite r2(objectTexture);
+    sf::Sprite r3(objectTexture);
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -72,46 +99,42 @@ int main()
 
         for (auto start = L1.begin(); start != L1.end(); start++)
         {
-            sf::CircleShape station;
-            station.setRadius(20);
+            sf::CircleShape people;
+            sf::Sprite station(stationTexture);
             if (start->get_occupied() == true)
             {
                 if (start->get_leaving() == 1)
                 {
-                    station.setFillColor(sf::Color::Yellow);
+                    people.setFillColor(sf::Color::Yellow);
+                    window.draw(people);
                     // 2 personnes sortent du train par secondes
                 }
                 else if (start->get_leaving() == 2)
                 {
-                    station.setFillColor(sf::Color::White);
+                    people.setFillColor(sf::Color::White);
+                    window.draw(people);
                     // 2 personnes entrent dans le train par secondes
                 }
                 else
                 {
-                    station.setFillColor(sf::Color::Blue);
+                    window.draw(people);
+                    people.setFillColor(sf::Color::Blue);
                 }
             }
-            else
-            {
-                station.setFillColor(sf::Color::Green);
-            }
-
             station.setPosition(start->get_x() - 20, start->get_y() - 20);
+            station.setRotation(30);
             window.draw(station);
         }
 
-        sf::RectangleShape r1(sf::Vector2f(30.0f, 10.0f));
-        r1.setFillColor(sf::Color::Red);
+        
         r1.setRotation(Rame1.get_arg(L1, 0));
         r1.setPosition(Rame1.get_x(), Rame1.get_y());
 
-        sf::RectangleShape r2(sf::Vector2f(30.0f, 10.0f));
-        r2.setFillColor(sf::Color::Red);
+        
         r2.setRotation(Rame2.get_arg(L1, 0));
         r2.setPosition(Rame2.get_x(), Rame2.get_y());
 
-        sf::RectangleShape r3(sf::Vector2f(30.0f, 10.0f));
-        r3.setFillColor(sf::Color::Red);
+        
         r3.setRotation(Rame3.get_arg(L1, 0));
         r3.setPosition(Rame3.get_x(), Rame3.get_y());
 

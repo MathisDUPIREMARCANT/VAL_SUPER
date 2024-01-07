@@ -26,7 +26,7 @@ int main()
     vector<Rame> L2_rame;
 
     vector<string> Station_name_L1 = {"Depart", "A_Lille Europe", "A_Lile Flandre ", "A_Rihour", "A_Republique", "A_Gambetta", "A_Wazemme", "A_Porte des Postes", "A_CHU", "Arrivee", "R_CHU", "R_Porte des Postes", "R_Wazemme", "R_Gambetta", "R_Republique", "R_Rihour", "R_Lille Flandre", "R_Lille Europe"};
-    vector<vector<double>> Station_position_L1 = {{1745, 40}, {1342, 75}, {1106, 125}, {817, 191}, {792, 309}, {817, 396}, {757, 555}, {665, 651}, {478, 715}, {264, 715}, {518, 755}, {705, 691}, {797, 595}, {857, 436}, {832, 349}, {857, 231}, {1146, 165}, {1382, 115}};
+    vector<vector<double>> Station_position_L1 = {{1745, 40}, {1342, 75}, {1106, 125}, {817, 191}, {792, 309}, {817, 396}, {757, 555}, {665, 651}, {478, 715}, {264, 715}, {518, 755}, {712, 691}, {804, 595}, {853, 436}, {849, 349}, {857, 225}, {1146, 165}, {1382, 115}};
     vector<int> Max_Pass_L1 = {0, 10, 10, 10, 10, 10, 10, 10, 0, 0, 10, 10, 10, 10, 10, 10, 10, 0};
 
     vector<double> coordonates = {1920, 1080};

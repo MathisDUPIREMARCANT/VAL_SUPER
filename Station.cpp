@@ -8,20 +8,21 @@
 #include <SFML/Graphics.hpp>
 #include "Station.h"
 #include "function.h"
+#include "Bouton.h"
 
 using namespace std;
 
-Station::Station(string const &name, const double &x, const double &y, const int &max_pass, vector<double> map_size)
+Station::Station(string const &name, const double &x, const double &y, const int &max_pass)
 {
-    auto coordonates = mercatorProjection(x, y, map_size[0], map_size[1]);
     this->name = name;
     this->x = x;
     this->y = y;
     this->waiting_pass = 0;
-    this->max_pass = 100;
+    this->max_pass = max_pass;
     this->occupied = false;
     this->distance = 0;
     this->argument = 0;
+    this->leaving = true;
 }
 
 int Station::add_waiting(const int &nb)
@@ -100,7 +101,6 @@ void Station::calculate_distance(vector<Station> &list)
             auto a = next.get_x() - this->x;
             auto b = next.get_y() - this->y;
             this->argument = atan2(b, a);
-            cout << this->name << "  : module:" << this->distance << " : argument:" << this->argument << " : " << list[(i + 1) % list.size()].get_name() << endl;
         }
     }
 }
@@ -112,11 +112,24 @@ void Station::decrease_pass()
 
 void Station::increase_pass()
 {
-    random_device rd;
-    mt19937 generator(rd());
-    uniform_int_distribution<int> distribution_leave(this->waiting_pass, this->max_pass);
+    if (this->max_pass != 0)
+    {
+        random_device rd;
+        mt19937 generator(rd());
+        uniform_int_distribution<int> distribution_leave(this->waiting_pass, this->max_pass);
 
-    int nb = distribution_leave(generator);
+        int nb = distribution_leave(generator);
 
-    this->waiting_pass += nb;
+        this->waiting_pass += nb;
+    }
+}
+
+void Station::change_leaving(int etat)
+{
+    this->leaving = etat;
+}
+
+int Station::get_leaving()
+{
+    return this->leaving;
 }

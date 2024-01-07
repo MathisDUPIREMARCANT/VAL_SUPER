@@ -11,18 +11,13 @@
 #define M_PI 3.141592653589793238462643383279502884L
 #endif
 
-// Faire la fonction avec les different if (si on arrive au bout alors on repars en arrière -1.)
-// Si on est au debut on avance en +1 jusqu'a atteindre le bout et donc repartir en arriere.
-// On accede au next rame grace a un vecteur qui contient des ppointeur vers des station. Ensuite on utilise get name pour le nom.
-void move_rame(Rame &rame, double t_ref, double acceleration, int nb_station, vector<Station> &station_list)
+void move_rame(Rame &rame, double t_ref, double acceleration, int nb_station, vector<Station> &station_list, Bouton &urgence)
 {
-    // wrapper
+    // wrapper like
 
     for (int i = 0; i < nb_station; i++)
     {
-        rame.go_to_next_station(acceleration, t_ref, station_list);
-
-        cout << "AAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAA\nAAAAAAAAAAA" << endl;
+        rame.go_to_next_station(acceleration, t_ref, station_list, ref(urgence));
     }
 }
 
